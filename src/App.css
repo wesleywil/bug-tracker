@@ -1,1 +1,7 @@
-
+body {
+  background-image: url(assets/circle_bg.svg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  height: 100vh;
+}

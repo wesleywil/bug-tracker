@@ -14,7 +14,7 @@ import TableBugs from "../../components/table_bugs/table_bugs.component";
 
 const Main = () => {
   return (
-    <div className="p-2">
+    <div className="p-2 bg-slate-900/90">
       <div>
         <div className="textbg-slate-800 border-2 p-2 rounded-xl">
           <h1 className=" text-3xl text-white font-semibold text-center border-b-2">

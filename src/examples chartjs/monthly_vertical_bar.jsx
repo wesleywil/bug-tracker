@@ -31,7 +31,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Bug Period",
+      text: "Monthly Bugs Period",
       color: "white",
     },
   },

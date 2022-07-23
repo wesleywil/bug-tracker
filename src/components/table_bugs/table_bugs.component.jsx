@@ -8,7 +8,8 @@ const TableBugs = () => {
             <th>Info</th>
             <th>Status</th>
             <th>Tag</th>
-            <th>Action</th>
+            <th>Visit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@ const TableBugs = () => {
             <td className="text-yellow-300 hover:text-yellow-500 font-semibold cursor-pointer	">
               Visit
             </td>
+            <td className="text-red-300 hover:text-red-500 font-semibold cursor-pointer	">
+              Delete
+            </td>
           </tr>
 
           <tr>
@@ -30,6 +34,9 @@ const TableBugs = () => {
             <td className="text-yellow-300 hover:text-yellow-500 font-semibold cursor-pointer	">
               Visit
             </td>
+            <td className="text-red-300 hover:text-red-500 font-semibold cursor-pointer	">
+              Delete
+            </td>
           </tr>
 
           <tr>
@@ -39,6 +46,9 @@ const TableBugs = () => {
             <td>Red</td>
             <td className="text-yellow-300 hover:text-yellow-500 font-semibold cursor-pointer	">
               Visit
+            </td>
+            <td className="text-red-300 hover:text-red-500 font-semibold cursor-pointer	">
+              Delete
             </td>
           </tr>
         </tbody>

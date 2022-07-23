@@ -6,6 +6,7 @@ import Header from "./components/header/header.component";
 //Pages
 import Main from "./pages/main/main";
 import ListBugs from "./pages/list_bugs/list_bugs";
+import AddBug from "./pages/add_bug/add_bug";
 
 //Styles
 import "./App.css";
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route exact="true" path="/" element={<Main />} />
         <Route exact="true" path="/bugs" element={<ListBugs />} />
+        <Route exact="true" path="/new" element={<AddBug />} />
       </Routes>
     </BrowserRouter>
   );

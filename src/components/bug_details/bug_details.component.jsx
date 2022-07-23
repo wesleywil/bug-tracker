@@ -38,7 +38,7 @@ const BugDetails = ({ blockHiddenHandle, blockHidden }) => {
           onClick={() => blockHiddenHandle(!blockHidden)}
           className="bg-slate-200 hover:bg-slate-300 active:bg-slate-500 text-slate-900 px-3 py-1 font-bold text-2xl m-2 rounded-3xl"
         >
-          Update
+          Edit
         </button>
       </div>
     </div>

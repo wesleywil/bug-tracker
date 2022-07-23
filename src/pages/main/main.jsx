@@ -1,14 +1,23 @@
-import { Doughnut } from "react-chartjs-2";
-import { Bar } from "react-chartjs-2";
+import { Doughnut, Bar } from "react-chartjs-2";
 
 import {
   data as doughnutData,
   options as doughnutOptions,
 } from "../../examples chartjs/doughnut";
 import {
-  data as verticalData,
-  options as verticalOptions,
-} from "../../examples chartjs/vertical_bar";
+  data as monthlyVerticalData,
+  options as monthlyVerticalOptions,
+} from "../../examples chartjs/monthly_vertical_bar";
+
+import {
+  data as horizontalData,
+  options as horizontalOptions,
+} from "../../examples chartjs/horizontal_bar";
+
+import {
+  data as priorityData,
+  options as priorityOptions,
+} from "../../examples chartjs/priority_vertical_bar";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
@@ -26,7 +35,18 @@ const Main = () => {
               <Doughnut data={doughnutData} options={doughnutOptions} />
             </div>
             <div className="w-2/3">
-              <Bar options={verticalOptions} data={verticalData} />
+              <Bar
+                options={monthlyVerticalOptions}
+                data={monthlyVerticalData}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col place-items-center gap-2 border-2 p-2 m-2">
+            <div className="w-2/3">
+              <Bar options={horizontalOptions} data={horizontalData} />
+            </div>
+            <div className="w-2/3">
+              <Bar options={priorityOptions} data={priorityData} />
             </div>
           </div>
           {/* Last 3 Bugs */}

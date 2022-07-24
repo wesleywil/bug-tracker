@@ -25,3 +25,8 @@ dist-ssr
 
 # Helper Text
 helper.txt
+
+
+# Added by cargo
+
+/target

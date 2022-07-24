@@ -1,0 +1,46 @@
+CREATE TABLE projects (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(30),
+    add_date TEXT,
+    link VARCHAR(150)
+);
+
+CREATE TABLE tags (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(40)
+);
+
+CREATE TABLE status (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(40),
+    description VARCHAR(200)
+);
+
+CREATE TABLE priorities (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(40),
+    description VARCHAR(200)
+);
+
+CREATE TABLE bugs (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    info VARCHAR(300),
+    tag_id INTEGER NOT NULL,
+    status_id INTEGER NOT NULL,
+    priority_id INTEGER NOT NULL,
+    add_date TEXT,
+    updated_date TEXT,
+    FOREIGN KEY (project_id) REFERENCES projects (id) 
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags (id) 
+    ON UPDATE CASCADE 
+    ON DELETE NO ACTION,
+    FOREIGN KEY (status_id) REFERENCES status (id) 
+    ON UPDATE CASCADE 
+    ON DELETE NO ACTION,
+    FOREIGN KEY (priority_id) REFERENCES priorities (id) 
+    ON UPDATE CASCADE 
+    ON DELETE NO ACTION
+);

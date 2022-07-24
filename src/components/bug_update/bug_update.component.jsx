@@ -7,7 +7,7 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle }) => {
       <textarea
         className="text-center w-full mt-2 bg-slate-600 text-white p-2 border-2"
         rows={10}
-      >
+        defaultValue={`
         It is a long established fact that a reader will be distracted by the
         readable content of a page when looking at its layout. The point of
         using Lorem Ipsum is that it has a more-or-less normal distribution of
@@ -17,7 +17,8 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle }) => {
         search for 'lorem ipsum' will uncover many web sites still in their
         infancy. Various versions have evolved over the years, sometimes by
         accident, sometimes on purpose (injected humour and the like).
-      </textarea>
+        `}
+      ></textarea>
 
       <DetailsSubTitle text={"Status"} />
       <select className="mt-2 rounded-xl w-full text-xl px-2 py-1 bg-slate-600 text-white ">

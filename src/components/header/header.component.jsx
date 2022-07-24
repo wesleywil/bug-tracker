@@ -13,6 +13,9 @@ const Header = () => {
           <Link to="/bugs" className="mr-5 hover:text-yellow-500">
             Bugs
           </Link>
+          <Link to="/projects" className="mr-5 hover:text-yellow-500">
+            Projects
+          </Link>
         </nav>
         <Link
           to="/"

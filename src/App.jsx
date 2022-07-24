@@ -7,6 +7,7 @@ import Header from "./components/header/header.component";
 import Main from "./pages/main/main";
 import ListBugs from "./pages/list_bugs/list_bugs";
 import AddBug from "./pages/add_bug/add_bug";
+import Projects from "./pages/projects/projects";
 
 //Styles
 import "./App.css";
@@ -19,6 +20,7 @@ function App() {
         <Route exact="true" path="/" element={<Main />} />
         <Route exact="true" path="/bugs" element={<ListBugs />} />
         <Route exact="true" path="/new" element={<AddBug />} />
+        <Route extact="true" path="/projects" element={<Projects />} />
       </Routes>
     </BrowserRouter>
   );

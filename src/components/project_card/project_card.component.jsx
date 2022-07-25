@@ -4,7 +4,7 @@ import BugBadge from "../bug-badge/bug-badge.component";
 
 const ProjectCard = ({ hidden, setHidden }) => {
   return (
-    <div className="bg-slate-600/50  w-96 rounded-xl p-2">
+    <div className="bg-slate-800/50 backdrop-blur-sm z-0  w-96 rounded-xl p-2">
       <span className="font-bold text-white">Project Name</span>
       <span className=" text-white float-right">Date: 2022/02/10</span>
       <div className="flex gap-2 m-2 justify-center">
@@ -14,33 +14,35 @@ const ProjectCard = ({ hidden, setHidden }) => {
         <BugBadge status={"Closed"} qtd={6} color={"text-red-400"} />
       </div>
       <div className="mt-2 flex justify-center gap-4 text-yellow-300 text-3xl">
-        <button
-          className="tooltip tooltip-bottom tooltip-warning"
+        <a
+          className="tooltip tooltip-right tooltip-warning z-40"
           data-tip="GitHub Link"
+          href="https://www.google.com"
+          target="_blank"
         >
           <FaGithub />
-        </button>
+        </a>
         <button
-          className="tooltip tooltip-bottom tooltip-warning"
+          className="tooltip tooltip-right tooltip-warning z-30"
           data-tip="New Bug"
         >
           <FaPlus />
         </button>
         <button
-          className="tooltip tooltip-bottom tooltip-warning"
+          className="tooltip tooltip-right tooltip-warning z-20"
           data-tip="All Bugs"
         >
           <FaBug />
         </button>
         <button
-          className="tooltip tooltip-bottom tooltip-warning"
+          className="tooltip tooltip-right tooltip-warning z-10"
           data-tip="Edit Project"
         >
           <FaRegEdit />
         </button>
 
         <button
-          className="tooltip tooltip-bottom tooltip-error text-red-500"
+          className="tooltip tooltip-right tooltip-error text-red-500 z-0"
           data-tip="Delete Project"
           onClick={() => setHidden(!hidden)}
         >

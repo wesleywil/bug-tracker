@@ -1,22 +1,35 @@
-import { useState } from "react";
-import { FaPlus, FaListAlt } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
-import {
-  allProjects,
-  deleteWrontProject,
-} from "../../server/projects_db_table";
+import { allProjects, createProject } from "../../server/projects_db_table";
 
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";
 
 const Projects = () => {
-  const [hiddenDelete, setHiddenDelete] = useState(true);
+  const [query, setQuery] = useState([]);
   const [hiddenForm, setHiddenForm] = useState(true);
 
-  const deleteHandle = async () => {
-    console.log("DELETING...");
-    deleteWrontProject(3).then((res) => {
-      console.log("INFO", res);
+  useEffect(() => {
+    const getAllProjects = async () => {
+      const res = await allProjects();
+      console.log("RESULT=> ", res);
+      setQuery(res);
+    };
+    getAllProjects();
+  }, []);
+
+  const handleFormSubmit = (event) => {
+    console.log("DATA==>", event.target.elements.title.value);
+
+    const data = {
+      title: event.target.elements.title.value,
+      link: event.target.elements.link.value,
+      description: event.target.elements.description.value,
+    };
+
+    createProject(data).then((res) => {
+      console.log("Result==>", res);
     });
   };
 
@@ -36,22 +49,27 @@ const Projects = () => {
           <FaPlus />
         </button>
       </div>
-      <button
-        onClick={() => deleteHandle()}
-        className="bg-black text-white px-2 rounded-full text-2xl"
-      >
-        DELETE
-      </button>
-
       <div className="flex flex-wrap justify-center gap-4 p-2 mt-2">
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
-        <ProjectCard hidden={hiddenDelete} setHidden={setHiddenDelete} />
+        {query.length ? (
+          query.map((item) => <ProjectCard key={item.id} item={item} />)
+        ) : (
+          <h1 className="bg-slate-500/20 backdrop-blur-sm p-6 text-6xl border-2 border-slate-700 rounded-2xl">
+            NO PROJECTS YET
+          </h1>
+        )}
       </div>
-      <ProjectForm hidden={hiddenForm} setHidden={setHiddenForm} />
+      <div
+        className={`overflow-hidden ${
+          hiddenForm ? "hidden" : ""
+        } bg-slate-800/50 backdrop-blur-sm absolute inset-1/4 border-2 border-slate-800 rounded-3xl`}
+      >
+        <ProjectForm
+          hidden={hiddenForm}
+          setHidden={setHiddenForm}
+          handleForm={handleFormSubmit}
+          formText={"New Project"}
+        />
+      </div>
     </div>
   );
 };

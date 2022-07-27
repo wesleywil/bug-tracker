@@ -50,29 +50,3 @@ export async function deleteProject(id) {
   };
   return response;
 }
-// Move to Bug Server File
-export async function selectBugsForProject(id, status_title) {
-  let response = {};
-  const action = await db.select(
-    `SELECT * FROM status, bugs WHERE project_id = ${id} AND bugs.status_id = status.id AND status.title = "${status_title}"`
-  );
-  response = {
-    message: "Bugs Retrieved",
-    status: 200,
-    data: action,
-  };
-  return response;
-}
-
-export async function createNewBugProject(bug) {
-  let response = {};
-  const action = await db.execute(
-    `INSERT INTO bugs (project_id,info,tag_id,status_id,priority_id,add_date) VALUES(${bug.project_id}, "${bug.info}", ${bug.tag_id}, 1, ${bug.priority_id}, Date("now"))`
-  );
-  response = {
-    messsage: "New bug registered!",
-    status: 201,
-    data: action,
-  };
-  return response;
-}

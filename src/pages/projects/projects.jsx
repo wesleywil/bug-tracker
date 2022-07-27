@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 
-import { allProjects, createProject } from "../../server/projects_db_table";
+import { allProjects, createProject } from "../../server/projects_table";
 
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";

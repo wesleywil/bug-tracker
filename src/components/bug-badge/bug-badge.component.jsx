@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { selectBugsForProject } from "../../server/projects_db_table";
+import { selectBugsForProject } from "../../server/bugs_table";
 const BugBadge = ({ status, color, project_id }) => {
   const [bugs, setBugs] = useState([]);
   useEffect(() => {

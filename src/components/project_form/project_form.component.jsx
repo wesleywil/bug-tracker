@@ -1,5 +1,3 @@
-import { createProject } from "../../server/projects_db_table";
-
 const ProjectForm = ({ hidden, setHidden, handleForm, formText, item }) => {
   return (
     <>

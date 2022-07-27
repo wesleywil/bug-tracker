@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { FaPlus, FaGithub, FaBug, FaTrashAlt, FaRegEdit } from "react-icons/fa";
 
-import {
-  updateProject,
-  deleteProject,
-  createNewBugProject,
-} from "../../server/projects_db_table";
+import { updateProject, deleteProject } from "../../server/projects_table";
+
+import { createNewBugProject } from "../../server/bugs_table";
 
 import BugBadge from "../bug-badge/bug-badge.component";
 import ProjectForm from "../project_form/project_form.component";
@@ -94,12 +93,13 @@ const ProjectCard = ({ item }) => {
           >
             <FaPlus />
           </button>
-          <button
+          <NavLink
             className="tooltip tooltip-right tooltip-warning z-20"
             data-tip="All Bugs"
+            to={`/bug_project/${item.id}`}
           >
             <FaBug />
-          </button>
+          </NavLink>
           <button
             className="tooltip tooltip-right tooltip-warning z-10"
             data-tip="Edit Project"

@@ -8,16 +8,36 @@ const load = Database.load("sqlite:bug_tracker.db").then((instance) => {
 
 export async function allBugs() {
   await load;
-  const res = await db.select("SELECT*FROM bugs");
+  const res =
+    await db.select(`SELECT bugs.id as bug_id, bugs.info as bug_info, bugs.add_date as bug_add_date, bugs.updated_date as bug_updated_date, status.title as status_title, tags.title as tag_title, projects.title as project_title, priorities.title as priority_title
+  FROM bugs, status, tags, projects, priorities WHERE bugs.project_id = projects.id AND bugs.status_id = status.id AND bugs.tag_id = tags.id AND bugs.priority_id = priorities.id`);
   return res;
 }
 
 export async function selectBugsByProject(id) {
   const res = await db.select(
-    `SELECT bugs.id as bug_id, bugs.info as bug_info, status.title as status_title, tags.title as tag_title, projects.title as project_title 
-    FROM bugs, status, tags, projects WHERE bugs.project_id = projects.id AND bugs.status_id = status.id AND bugs.tag_id = tags.id AND bugs.project_id = $1`,
+    `SELECT bugs.id as bug_id, bugs.info as bug_info, status.title as status_title, tags.title as tag_title, projects.title as project_title, priorities.title as priority_title
+    FROM bugs, status, tags, projects, priorities WHERE bugs.project_id = projects.id AND bugs.status_id = status.id AND bugs.tag_id = tags.id AND bugs.priority_id = priorities.id AND bugs.project_id = $1`,
     [id]
   );
+  return res;
+}
+
+export async function selectBugById(id) {
+  const res = await db.select(
+    `
+  SELECT bugs.id as bug_id, bugs.info as bug_info, bugs.add_date as bug_add_date, bugs.updated_date as bug_updated_date, projects.title as project_name, tags.title as tag_title, priorities.title as priority_title, status.title as status_title 
+  FROM bugs,projects,tags,status,priorities 
+  WHERE bugs.project_id = projects.id AND bugs.tag_id = tags.id AND bugs.status_id = status.id AND bugs.priority_id = priorities.id AND bugs.id=$1`,
+    [id]
+  );
+  return res;
+}
+
+export async function selectLast3Bugs() {
+  const res =
+    await db.select(`SELECT bugs.id as bug_id, bugs.info as bug_info, status.title as status_title, tags.title as tag_title, projects.title as project_title, priorities.title as priority_title
+  FROM bugs, status, tags, projects, priorities WHERE bugs.project_id = projects.id AND bugs.status_id = status.id AND bugs.tag_id = tags.id AND bugs.priority_id = priorities.id ORDER BY bugs.id DESC LIMIT 3`);
   return res;
 }
 
@@ -55,6 +75,17 @@ export async function createNewBugProject(bug) {
   response = {
     messsage: "New bug registered!",
     status: 201,
+    data: action,
+  };
+  return response;
+}
+
+export async function deleteBugById(id) {
+  let response = {};
+  const action = await db.execute("DELETE FROM bugs WHERE id=$1", [id]);
+  response = {
+    message: "Bug Successfully Deleted!",
+    status: 200,
     data: action,
   };
   return response;

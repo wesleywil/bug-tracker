@@ -1,9 +1,20 @@
+import { useEffect, useState } from "react";
+
 import { FaSearch } from "react-icons/fa";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
-import BugDetailsAndUpdate from "../../components/bug_details_and_update/bug_details_and_update.component";
+
+import { allBugs } from "../../server/bugs_table";
 
 const ListBugs = () => {
+  const [bugs, setBugs] = useState([]);
+
+  useEffect(() => {
+    allBugs().then((res) => {
+      setBugs(res);
+    });
+  }, []);
+
   return (
     <div className="p-2 bg-slate-900/80 h-screen">
       <h1 className="text-3xl text-white font-semibold text-center border-b-2">
@@ -20,9 +31,9 @@ const ListBugs = () => {
             <FaSearch />
           </button>
         </div>
-        <TableBugs />
+        <TableBugs bugs={bugs} />
       </div>
-      <BugDetailsAndUpdate />
+      {/* <BugDetailsAndUpdate /> */}
     </div>
   );
 };

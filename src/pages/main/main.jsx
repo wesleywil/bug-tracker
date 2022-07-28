@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Doughnut, Bar } from "react-chartjs-2";
 
 import {
@@ -21,7 +22,17 @@ import {
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
+import { selectLast3Bugs } from "../../server/bugs_table";
+
 const Main = () => {
+  const [bugs, setBugs] = useState([]);
+
+  useEffect(() => {
+    selectLast3Bugs().then((res) => {
+      setBugs(res);
+    });
+  }, []);
+
   return (
     <div className="p-2 bg-slate-900/90">
       <div>
@@ -54,7 +65,7 @@ const Main = () => {
             <h1 className="text-3xl text-white font-semibold text-center border-b-2">
               Last 3 Bugs
             </h1>
-            <TableBugs />
+            <TableBugs bugs={bugs} />
           </div>
         </div>
       </div>

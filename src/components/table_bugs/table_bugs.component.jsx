@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import BugDetails from "../bug_details/bug_details.component";
+import BugUpdate from "../bug_update/bug_update.component";
 
 import { selectBugById, deleteBugById } from "../../server/bugs_table";
 
 const TableBugs = ({ bugs }) => {
   const [hiddenDetails, setHiddenDetails] = useState(true);
+  const [hiddenUpdate, setHiddenUpdate] = useState(false);
   const [hiddenDelete, setHiddenDelete] = useState(true);
   const [bugId, setBugId] = useState(0);
-
   const [bug, setBug] = useState({
     bug_id: "",
     bug_info: "",
@@ -19,6 +20,10 @@ const TableBugs = ({ bugs }) => {
     bug_add_date: "",
     bug_updated_date: "",
   });
+
+  useEffect(() => {
+    console.log("Table Bugs", bugs);
+  }, [hiddenDelete, bugs]);
 
   const handleSelectBugId = async (id) => {
     const res = await selectBugById(id);
@@ -40,12 +45,17 @@ const TableBugs = ({ bugs }) => {
     if (id > 0) {
       const res = await deleteBugById(id);
       console.log("BUG DELETED! ", res);
-      window.refresh();
+      location.reload();
     }
   };
 
   const handleHiddenDelete = (id) => {
     setHiddenDelete(!hiddenDelete);
+    setBugId(id);
+  };
+
+  const handleHiddenUpdate = (id) => {
+    setHiddenUpdate(!hiddenUpdate);
     setBugId(id);
   };
 
@@ -85,6 +95,7 @@ const TableBugs = ({ bugs }) => {
               <th>Priority</th>
               <th>Project</th>
               <th>Visit</th>
+              <th>Update</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -93,7 +104,11 @@ const TableBugs = ({ bugs }) => {
               bugs.map((item) => (
                 <tr key={item.bug_id}>
                   <th>{item.bug_id}</th>
-                  <th>{item.bug_info}</th>
+                  <th>
+                    {item.bug_info.length > 13
+                      ? item.bug_info.slice(0, 13) + "..."
+                      : item.bug_info}
+                  </th>
                   <th>{item.status_title}</th>
                   <th>{item.tag_title}</th>
                   <th>{item.priority_title}</th>
@@ -103,6 +118,12 @@ const TableBugs = ({ bugs }) => {
                     className="text-yellow-300 hover:text-yellow-500 font-semibold cursor-pointer	"
                   >
                     View
+                  </td>
+                  <td
+                    onClick={() => handleHiddenUpdate(item.bug_id)}
+                    className="text-green-300 hover:text-green-500 font-semibold cursor-pointer	"
+                  >
+                    Update
                   </td>
                   <td
                     onClick={() => handleHiddenDelete(item.bug_id)}
@@ -122,6 +143,7 @@ const TableBugs = ({ bugs }) => {
                 <th>No Projects</th>
                 <th>X</th>
                 <th>X</th>
+                <th>X</th>
               </tr>
             )}
           </tbody>
@@ -132,6 +154,12 @@ const TableBugs = ({ bugs }) => {
           blockHiddenHandle={setHiddenDetails}
           blockHidden={hiddenDetails}
           bug={bug}
+          btnName={"Close"}
+        />
+        <BugUpdate
+          blockHiddenHandle={setHiddenUpdate}
+          blockHidden={hiddenUpdate}
+          bug_id={bugId}
         />
       </div>
     </>

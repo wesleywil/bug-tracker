@@ -11,9 +11,9 @@ const ProjectBugs = () => {
   const [bugs, setBugs] = useState([]);
 
   useEffect(() => {
+    console.log("Project Bugs");
     selectBugsByProject(project_id).then((res) => {
       setBugs(res);
-      console.log("RESPONSE => ", res);
     });
   }, []);
 

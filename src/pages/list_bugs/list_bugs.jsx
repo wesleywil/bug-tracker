@@ -33,7 +33,6 @@ const ListBugs = () => {
         </div>
         <TableBugs bugs={bugs} />
       </div>
-      {/* <BugDetailsAndUpdate /> */}
     </div>
   );
 };

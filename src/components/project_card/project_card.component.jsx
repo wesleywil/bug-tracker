@@ -15,7 +15,12 @@ const ProjectCard = ({ item }) => {
   const [formHidden, setFormHidden] = useState(true);
   const [formBugHidden, setFormBugHidden] = useState(true);
 
+  useEffect(() => {
+    console.log("Project Card");
+  }, [item]);
+
   const handleFormSubmit = (event) => {
+    event.preventDefault();
     const data = {
       title: event.target.elements.title.value,
       link: event.target.elements.link.value,
@@ -37,13 +42,14 @@ const ProjectCard = ({ item }) => {
     };
     createNewBugProject(data).then((res) => {
       console.log("NEW BUG RESPONSE =>", res);
+      setFormBugHidden(true);
     });
   };
 
   const handleDelete = async (id) => {
     const res = await deleteProject(id);
     console.log("Delete Response =>", res);
-    window.reload();
+    location.reload();
   };
 
   return (

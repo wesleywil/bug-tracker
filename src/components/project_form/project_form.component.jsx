@@ -1,4 +1,8 @@
+import { useEffect } from "react";
+
 const ProjectForm = ({ hidden, setHidden, handleForm, formText, item }) => {
+  useEffect(() => {}, [item]);
+
   return (
     <>
       <h1 className="text-3xl text-white backdrop-blur-sm bg-slate-900/50 font-semibold text-center">

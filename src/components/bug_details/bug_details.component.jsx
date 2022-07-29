@@ -1,6 +1,6 @@
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
 
-const BugDetails = ({ blockHiddenHandle, blockHidden, bug }) => {
+const BugDetails = ({ blockHiddenHandle, blockHidden, bug, btnName }) => {
   return (
     <div className={`mt-2 ${blockHidden ? "hidden" : ""}  m-2 py-2`}>
       <h1 className="text-white text-3xl text-center mb-4">
@@ -38,7 +38,7 @@ const BugDetails = ({ blockHiddenHandle, blockHidden, bug }) => {
           onClick={() => blockHiddenHandle(!blockHidden)}
           className="bg-slate-200 hover:bg-slate-300 active:bg-slate-500 text-slate-900 px-3 py-1 font-bold text-2xl m-2 rounded-3xl"
         >
-          Edit
+          {btnName ? btnName : "Edit"}
         </button>
       </div>
     </div>

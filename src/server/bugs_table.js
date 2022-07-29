@@ -34,6 +34,11 @@ export async function selectBugById(id) {
   return res;
 }
 
+export async function selectBugByIdSimple(id) {
+  const res = await db.select("SELECT*FROM bugs WHERE id=$1", [id]);
+  return res;
+}
+
 export async function selectLast3Bugs() {
   const res =
     await db.select(`SELECT bugs.id as bug_id, bugs.info as bug_info, status.title as status_title, tags.title as tag_title, projects.title as project_title, priorities.title as priority_title
@@ -75,6 +80,19 @@ export async function createNewBugProject(bug) {
   response = {
     messsage: "New bug registered!",
     status: 201,
+    data: action,
+  };
+  return response;
+}
+
+export async function updateBug(bug) {
+  let response = {};
+  const action = await db.execute(
+    `UPDATE bugs SET info="${bug.info}", priority_id=${bug.priority_id},status_id=${bug.status_id},tag_id=${bug.tag_id}, updated_date=Date("now") WHERE id=${bug.id}`
+  );
+  response = {
+    message: "Bug Successfully Updated!",
+    status: 200,
     data: action,
   };
   return response;

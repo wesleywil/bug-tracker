@@ -3,14 +3,14 @@ import { NavLink } from "react-router-dom";
 import { FaPlus, FaGithub, FaBug, FaTrashAlt, FaRegEdit } from "react-icons/fa";
 
 import { updateProject, deleteProject } from "../../server/projects_table";
-
 import { createNewBugProject } from "../../server/bugs_table";
 
 import BugBadge from "../bug-badge/bug-badge.component";
 import ProjectForm from "../project_form/project_form.component";
 import ProjectNewBug from "../project_new_bug/project_new_bug.component";
+import StatusAlert from "../status_alert/status_alert.component";
 
-const ProjectCard = ({ item }) => {
+const ProjectCard = ({ item, setMessage }) => {
   const [hidden, setHidden] = useState(true);
   const [formHidden, setFormHidden] = useState(true);
   const [formBugHidden, setFormBugHidden] = useState(true);
@@ -28,7 +28,13 @@ const ProjectCard = ({ item }) => {
       id: item.id,
     };
     updateProject(data).then((res) => {
-      console.log("Response => ", res);
+      setMessage(
+        <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
+      );
+      setFormHidden(!formHidden);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     });
   };
 
@@ -41,15 +47,23 @@ const ProjectCard = ({ item }) => {
       priority_id: parseInt(event.target.elements.priority_id.value),
     };
     createNewBugProject(data).then((res) => {
-      console.log("NEW BUG RESPONSE =>", res);
+      setMessage(<StatusAlert message={res.message} />);
       setFormBugHidden(true);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     });
   };
 
   const handleDelete = async (id) => {
     const res = await deleteProject(id);
-    console.log("Delete Response =>", res);
-    location.reload();
+    //console.log("Delete Response =>", res);
+    //location.reload();
+    setMessage(<StatusAlert message={res.message} bgColor={"bg-red-600"} />);
+    setHidden(true);
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
   return (

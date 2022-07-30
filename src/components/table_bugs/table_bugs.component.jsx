@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 
 import BugDetails from "../bug_details/bug_details.component";
 import BugUpdate from "../bug_update/bug_update.component";
+import StatusAlert from "../status_alert/status_alert.component";
 
 import { selectBugById, deleteBugById } from "../../server/bugs_table";
 
 const TableBugs = ({ bugs }) => {
+  const [response, setResponse] = useState("");
   const [hiddenDetails, setHiddenDetails] = useState(true);
   const [hiddenUpdate, setHiddenUpdate] = useState(false);
   const [hiddenDelete, setHiddenDelete] = useState(true);
@@ -45,7 +47,11 @@ const TableBugs = ({ bugs }) => {
     if (id > 0) {
       const res = await deleteBugById(id);
       console.log("BUG DELETED! ", res);
-      location.reload();
+      setResponse(<StatusAlert message={res.message} bgColor={"bg-red-600"} />);
+
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     }
   };
 
@@ -61,6 +67,7 @@ const TableBugs = ({ bugs }) => {
 
   return (
     <>
+      {response}
       <div
         className={`border-2 w-1/2 mx-auto rounded-3xl p-2 mb-2 ${
           hiddenDelete ? "hidden" : ""
@@ -160,6 +167,7 @@ const TableBugs = ({ bugs }) => {
           blockHiddenHandle={setHiddenUpdate}
           blockHidden={hiddenUpdate}
           bug_id={bugId}
+          setMessage={setResponse}
         />
       </div>
     </>

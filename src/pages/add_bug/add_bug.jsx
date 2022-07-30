@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import StatusAlert from "../../components/status_alert/status_alert.component";
 
 import { allProjects } from "../../server/projects_table";
 import { allPriorities } from "../../server/priorities_table";
@@ -7,6 +10,8 @@ import { allTags } from "../../server/tags_table";
 import { createBug } from "../../server/bugs_table";
 
 const AddBug = () => {
+  let navigate = useNavigate();
+  const [response, setResponse] = useState("");
   const [projects, setProjects] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [status, setStatus] = useState([]);
@@ -36,15 +41,18 @@ const AddBug = () => {
       status_id: parseInt(e.target.elements.status_id.value),
       priority_id: parseInt(e.target.elements.priority_id.value),
     };
-    //console.log("DATA=-=> ", data);
 
     createBug(data).then((res) => {
-      console.log("Created", res);
+      setResponse(<StatusAlert message={res.message} />);
+      setTimeout(() => {
+        setResponse(<Navigate to="/bugs" replace={true} />);
+      }, 3000);
     });
   };
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">
+      {response}
       <h1 className="text-3xl text-white font-semibold text-center border-b-2">
         New Bug
       </h1>
@@ -112,6 +120,9 @@ const AddBug = () => {
               Submit
             </button>
             <button
+              onClick={() => {
+                navigate("/");
+              }}
               type="button"
               className="text-2xl font-bold rounded-xl px-2 bg-red-400 hover:bg-red-500 active:bg-red-700 text-slate-900"
             >

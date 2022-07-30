@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
+import StatusAlert from "../status_alert/status_alert.component";
 
 import { selectBugByIdSimple, updateBug } from "../../server/bugs_table";
 import { allPriorities } from "../../server/priorities_table";
 import { allTags } from "../../server/tags_table";
 import { allStatus } from "../../server/status_table";
 
-const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id }) => {
+const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id, setMessage }) => {
   const [priorities, setPriorities] = useState([]);
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState([]);
@@ -49,8 +50,13 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id }) => {
     };
     console.log("UPDATED DATA=>", data);
     updateBug(data).then((res) => {
-      console.log("UPDATE BUG!? ", res);
-      location.reload();
+      setMessage(
+        <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
+      );
+      blockHiddenHandle(!blockHidden);
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     });
   };
 

@@ -78,7 +78,7 @@ export async function createNewBugProject(bug) {
     `INSERT INTO bugs (project_id,info,tag_id,status_id,priority_id,add_date) VALUES(${bug.project_id}, "${bug.info}", ${bug.tag_id}, 1, ${bug.priority_id}, Date("now"))`
   );
   response = {
-    messsage: "New bug registered!",
+    message: "New bug registered!",
     status: 201,
     data: action,
   };

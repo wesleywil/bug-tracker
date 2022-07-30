@@ -5,8 +5,10 @@ import { allProjects, createProject } from "../../server/projects_table";
 
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";
+import StatusAlert from "../../components/status_alert/status_alert.component";
 
 const Projects = () => {
+  const [response, setResponse] = useState("");
   const [query, setQuery] = useState([]);
   const [hiddenForm, setHiddenForm] = useState(true);
 
@@ -17,7 +19,7 @@ const Projects = () => {
       setQuery(res);
     };
     getAllProjects();
-  }, []);
+  }, [response]);
 
   const handleFormSubmit = (event) => {
     console.log("DATA==>", event.target.elements.title.value);
@@ -29,12 +31,17 @@ const Projects = () => {
     };
 
     createProject(data).then((res) => {
-      console.log("Result==>", res);
+      setResponse(<StatusAlert message={res.message} />);
+      setHiddenForm(true);
+      setTimeout(() => {
+        setResponse("");
+      }, 3000);
     });
   };
 
   return (
     <div className="h-screen">
+      {response}
       <h1 className="text-3xl text-white font-semibold text-center border-b-2">
         Projects
       </h1>
@@ -51,7 +58,9 @@ const Projects = () => {
       </div>
       <div className="flex flex-wrap justify-center gap-4 p-2 mt-2">
         {query.length ? (
-          query.map((item) => <ProjectCard key={item.id} item={item} />)
+          query.map((item) => (
+            <ProjectCard key={item.id} item={item} setMessage={setResponse} />
+          ))
         ) : (
           <h1 className="bg-slate-500/20 backdrop-blur-sm p-6 text-6xl border-2 border-slate-700 rounded-2xl">
             NO PROJECTS YET

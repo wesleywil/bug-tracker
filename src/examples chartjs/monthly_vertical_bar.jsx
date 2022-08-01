@@ -31,7 +31,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Monthly Bugs Period",
+      text: "Monthly Bugs Period 2022",
       color: "white",
     },
   },
@@ -65,6 +65,7 @@ const labels = [
   "July",
   "August",
   "September",
+  "October",
   "November",
   "December",
 ];

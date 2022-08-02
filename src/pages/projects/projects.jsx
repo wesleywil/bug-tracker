@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { hide, show } from "../../redux/projects/hideProjectFormSlice.js";
+
 import { FaPlus } from "react-icons/fa";
 
 import { allProjects, createProject } from "../../server/projects_table";
@@ -8,9 +11,12 @@ import ProjectForm from "../../components/project_form/project_form.component";
 import StatusAlert from "../../components/status_alert/status_alert.component";
 
 const Projects = () => {
+  // Using Redux
+  const hideForm = useSelector((state) => state.hide_project_form.value);
+  const dispatch = useDispatch();
+
   const [response, setResponse] = useState("");
   const [query, setQuery] = useState([]);
-  const [hiddenForm, setHiddenForm] = useState(true);
 
   useEffect(() => {
     const getAllProjects = async () => {
@@ -32,7 +38,7 @@ const Projects = () => {
 
     createProject(data).then((res) => {
       setResponse(<StatusAlert message={res.message} />);
-      setHiddenForm(true);
+      dispatch(hide());
       setTimeout(() => {
         setResponse("");
       }, 3000);
@@ -50,7 +56,7 @@ const Projects = () => {
         data-tip="New Project"
       >
         <button
-          onClick={() => setHiddenForm(!hiddenForm)}
+          onClick={() => dispatch(show())}
           className="rounded-full bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-700 p-2 text-2xl text-slate-900 mt-2 ml-12"
         >
           <FaPlus />
@@ -69,15 +75,10 @@ const Projects = () => {
       </div>
       <div
         className={`overflow-hidden ${
-          hiddenForm ? "hidden" : ""
+          hideForm ? "hidden" : ""
         } bg-slate-800/50 backdrop-blur-sm absolute inset-1/4 border-2 border-slate-800 rounded-3xl`}
       >
-        <ProjectForm
-          hidden={hiddenForm}
-          setHidden={setHiddenForm}
-          handleForm={handleFormSubmit}
-          formText={"New Project"}
-        />
+        <ProjectForm handleForm={handleFormSubmit} formText={"New Project"} />
       </div>
     </div>
   );

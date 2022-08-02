@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
 import StatusAlert from "../status_alert/status_alert.component";
@@ -8,7 +9,13 @@ import { allPriorities } from "../../server/priorities_table";
 import { allTags } from "../../server/tags_table";
 import { allStatus } from "../../server/status_table";
 
-const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id, setMessage }) => {
+import { hide } from "../../redux/table_bugs/hideUpdateSlice";
+
+const BugUpdate = ({ bug_id, setMessage }) => {
+  // Using Redux
+  const hideUpdate = useSelector((state) => state.hide_update.value);
+  const dispatch = useDispatch();
+
   const [priorities, setPriorities] = useState([]);
   const [tags, setTags] = useState([]);
   const [status, setStatus] = useState([]);
@@ -53,7 +60,7 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id, setMessage }) => {
       setMessage(
         <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
       );
-      blockHiddenHandle(!blockHidden);
+      dispatch(hide());
       setTimeout(() => {
         location.reload();
       }, 3000);
@@ -61,7 +68,7 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id, setMessage }) => {
   };
 
   return (
-    <div className={`mt-2 ${!blockHidden ? "hidden" : ""}  m-2 p-2`}>
+    <div className={`mt-2 ${!hideUpdate ? "hidden" : ""}  m-2 p-2`}>
       <form onSubmit={handleSubmit}>
         <DetailsSubTitle text={"Update"} />
         <textarea
@@ -131,7 +138,7 @@ const BugUpdate = ({ blockHidden, blockHiddenHandle, bug_id, setMessage }) => {
           </button>
           <button
             type="button"
-            onClick={() => blockHiddenHandle(!blockHidden)}
+            onClick={() => dispatch(hide())}
             className="bg-slate-200 hover:bg-slate-300 active:bg-slate-500 text-slate-900 px-3 py-1 font-bold text-2xl m-2 rounded-3xl"
           >
             Cancel

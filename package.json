@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^7.3.0",
+    "@reduxjs/toolkit": "^1.8.3",
     "@tauri-apps/cli": "^1.0.0",
     "chart.js": "^3.8.0",
     "cross-env": "^7.0.3",
@@ -19,6 +20,7 @@
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
+    "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#dd4b336982e1c40af33860ec30e17cfd9400c6cc"
   },

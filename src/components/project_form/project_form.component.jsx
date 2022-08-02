@@ -1,6 +1,13 @@
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-const ProjectForm = ({ hidden, setHidden, handleForm, formText, item }) => {
+import { hide } from "../../redux/projects/hideProjectFormSlice";
+import { hide as hideEdit } from "../../redux/projects/hideProjectFormEditSlice";
+
+const ProjectForm = ({ handleForm, formText, item }) => {
+  //Using Redux
+  const dispatch = useDispatch();
+
   useEffect(() => {}, [item]);
 
   return (
@@ -40,7 +47,7 @@ const ProjectForm = ({ hidden, setHidden, handleForm, formText, item }) => {
             Submit
           </button>
           <button
-            onClick={() => setHidden(!hidden)}
+            onClick={item ? () => dispatch(hideEdit()) : () => dispatch(hide())}
             type="button"
             className="bg-red-400 hover:bg-red-500 active:bg-red-700 text-slate-700 font-bold text-2xl px-2 rounded-xl"
           >

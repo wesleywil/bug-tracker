@@ -1,8 +1,16 @@
+import { useSelector, useDispatch } from "react-redux";
+
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
 
-const BugDetails = ({ blockHiddenHandle, blockHidden, bug, btnName }) => {
+import { hide } from "../../redux/table_bugs/hideDetailsSlice";
+
+const BugDetails = ({ bug, btnName }) => {
+  // Using Redux
+  const hideDetails = useSelector((state) => state.hide_details.value);
+  const dispatch = useDispatch();
+
   return (
-    <div className={`mt-2 ${blockHidden ? "hidden" : ""}  m-2 py-2`}>
+    <div className={`mt-2 ${hideDetails ? "hidden" : ""}  m-2 py-2`}>
       <h1 className="text-white text-3xl text-center mb-4">
         {bug.project_title}
       </h1>
@@ -35,7 +43,7 @@ const BugDetails = ({ blockHiddenHandle, blockHidden, bug, btnName }) => {
       </p>
       <div className="border-2 flex justify-center mt-2">
         <button
-          onClick={() => blockHiddenHandle(!blockHidden)}
+          onClick={() => dispatch(hide())}
           className="bg-slate-200 hover:bg-slate-300 active:bg-slate-500 text-slate-900 px-3 py-1 font-bold text-2xl m-2 rounded-3xl"
         >
           {btnName ? btnName : "Edit"}

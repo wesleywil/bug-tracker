@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import BugDetails from "../bug_details/bug_details.component";
 import BugUpdate from "../bug_update/bug_update.component";
@@ -6,11 +7,21 @@ import StatusAlert from "../status_alert/status_alert.component";
 
 import { selectBugById, deleteBugById } from "../../server/bugs_table";
 
+import { show as showDetails } from "../../redux/table_bugs/hideDetailsSlice";
+import { show as showUpdate } from "../../redux/table_bugs/hideUpdateSlice";
+import {
+  show as showDelete,
+  hide as hideDelete,
+} from "../../redux/table_bugs/hideDeleteSlice";
+
 const TableBugs = ({ bugs }) => {
+  //Using Redux
+  const dispatchViewDetails = useDispatch();
+  const dispatchViewUpdate = useDispatch();
+  const dispatchViewDelete = useDispatch();
+  const hideDeleteSelector = useSelector((state) => state.hide_delete.value);
+
   const [response, setResponse] = useState("");
-  const [hiddenDetails, setHiddenDetails] = useState(true);
-  const [hiddenUpdate, setHiddenUpdate] = useState(false);
-  const [hiddenDelete, setHiddenDelete] = useState(true);
   const [bugId, setBugId] = useState(0);
   const [bug, setBug] = useState({
     bug_id: "",
@@ -25,7 +36,7 @@ const TableBugs = ({ bugs }) => {
 
   useEffect(() => {
     console.log("Table Bugs", bugs);
-  }, [hiddenDelete, bugs]);
+  }, [bugs]);
 
   const handleSelectBugId = async (id) => {
     const res = await selectBugById(id);
@@ -40,7 +51,7 @@ const TableBugs = ({ bugs }) => {
       bug_add_date: res[0].bug_add_date,
       bug_updated_date: res[0].bug_updated_date,
     });
-    setHiddenDetails(false);
+    dispatchViewDetails(showDetails());
   };
 
   const handleDeleteBugById = async (id) => {
@@ -56,12 +67,12 @@ const TableBugs = ({ bugs }) => {
   };
 
   const handleHiddenDelete = (id) => {
-    setHiddenDelete(!hiddenDelete);
+    dispatchViewDelete(showDelete());
     setBugId(id);
   };
 
   const handleHiddenUpdate = (id) => {
-    setHiddenUpdate(!hiddenUpdate);
+    dispatchViewUpdate(showUpdate());
     setBugId(id);
   };
 
@@ -70,7 +81,7 @@ const TableBugs = ({ bugs }) => {
       {response}
       <div
         className={`border-2 w-1/2 mx-auto rounded-3xl p-2 mb-2 ${
-          hiddenDelete ? "hidden" : ""
+          hideDeleteSelector ? "hidden" : ""
         }`}
       >
         <h1 className="text-center text-red-500">
@@ -84,7 +95,7 @@ const TableBugs = ({ bugs }) => {
             YES
           </button>
           <button
-            onClick={() => setHiddenDelete(!hiddenDelete)}
+            onClick={() => dispatchViewUpdate(hideDelete())}
             className="text-green-400 hover:text-green-500 active:text-green-700"
           >
             NO
@@ -157,18 +168,8 @@ const TableBugs = ({ bugs }) => {
         </table>
       </div>
       <div className="bg-slate-600/40 backdrop-blur-sm absolute ml-10 inset-x-1/4 top-52 rounded-xl">
-        <BugDetails
-          blockHiddenHandle={setHiddenDetails}
-          blockHidden={hiddenDetails}
-          bug={bug}
-          btnName={"Close"}
-        />
-        <BugUpdate
-          blockHiddenHandle={setHiddenUpdate}
-          blockHidden={hiddenUpdate}
-          bug_id={bugId}
-          setMessage={setResponse}
-        />
+        <BugDetails bug={bug} btnName={"Close"} />
+        <BugUpdate bug_id={bugId} setMessage={setResponse} />
       </div>
     </>
   );

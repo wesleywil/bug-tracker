@@ -1,4 +1,10 @@
+import { useDispatch } from "react-redux";
+
+import { hide, show } from "../../redux/bugs/hideBugFormSlice";
+
 const ProjectNewBug = ({ name, handleForm, hidden, setHidden }) => {
+  // Using Redux
+  const dispatch = useDispatch();
   return (
     <form className="flex flex-col text-xl text-white" onSubmit={handleForm}>
       <h1 className="font-semibold text-center">{name}</h1>
@@ -26,7 +32,7 @@ const ProjectNewBug = ({ name, handleForm, hidden, setHidden }) => {
         <button
           type="button"
           className="text-2xl font-bold rounded-xl px-2 bg-red-400 hover:bg-red-500 active:bg-red-700 text-slate-900"
-          onClick={() => setHidden(!hidden)}
+          onClick={() => dispatch(hide())}
         >
           Cancel
         </button>

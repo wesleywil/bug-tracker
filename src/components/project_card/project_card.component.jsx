@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { FaPlus, FaGithub, FaBug, FaTrashAlt, FaRegEdit } from "react-icons/fa";
 
@@ -10,10 +11,24 @@ import ProjectForm from "../project_form/project_form.component";
 import ProjectNewBug from "../project_new_bug/project_new_bug.component";
 import StatusAlert from "../status_alert/status_alert.component";
 
+import {
+  show as showEdit,
+  hide as hideEdit,
+} from "../../redux/projects/hideProjectFormEditSlice";
+
+import {
+  show as showFormBug,
+  hide as hideFormBug,
+} from "../../redux/bugs/hideBugFormSlice";
+
 const ProjectCard = ({ item, setMessage }) => {
+  // Using Redux
+  const dispatchViewForm = useDispatch();
+  const hideForm = useSelector((state) => state.hide_project_form_edit.value);
+  const dispatchViewBugForm = useDispatch();
+  const formBugHidden = useSelector((state) => state.hide_bug_form.value);
+
   const [hidden, setHidden] = useState(true);
-  const [formHidden, setFormHidden] = useState(true);
-  const [formBugHidden, setFormBugHidden] = useState(true);
 
   useEffect(() => {
     console.log("Project Card");
@@ -31,7 +46,7 @@ const ProjectCard = ({ item, setMessage }) => {
       setMessage(
         <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
       );
-      setFormHidden(!formHidden);
+      dispatchViewForm(hideEdit());
       setTimeout(() => {
         setMessage("");
       }, 3000);
@@ -48,7 +63,7 @@ const ProjectCard = ({ item, setMessage }) => {
     };
     createNewBugProject(data).then((res) => {
       setMessage(<StatusAlert message={res.message} />);
-      setFormBugHidden(true);
+      dispatchViewBugForm(hideFormBug());
       setTimeout(() => {
         setMessage("");
       }, 3000);
@@ -109,7 +124,7 @@ const ProjectCard = ({ item, setMessage }) => {
           <button
             className="tooltip tooltip-right tooltip-warning z-30"
             data-tip="New Bug"
-            onClick={() => setFormBugHidden(!formBugHidden)}
+            onClick={() => dispatchViewBugForm(showFormBug())}
           >
             <FaPlus />
           </button>
@@ -123,7 +138,7 @@ const ProjectCard = ({ item, setMessage }) => {
           <button
             className="tooltip tooltip-right tooltip-warning z-10"
             data-tip="Edit Project"
-            onClick={() => setFormHidden(!formHidden)}
+            onClick={() => dispatchViewForm(showEdit())}
           >
             <FaRegEdit />
           </button>
@@ -162,13 +177,11 @@ const ProjectCard = ({ item, setMessage }) => {
       {/* Edit Project */}
       <div
         className={`${
-          formHidden ? "hidden" : ""
+          hideForm ? "hidden" : ""
         } absolute w-96 bg-slate-800/80 backdrop-blur-sm z-10`}
       >
         <ProjectForm
           handleForm={handleFormSubmit}
-          hidden={formHidden}
-          setHidden={setFormHidden}
           formText={"Edit Project"}
           item={item}
         />
@@ -179,12 +192,7 @@ const ProjectCard = ({ item, setMessage }) => {
           formBugHidden ? "hidden" : ""
         } p-4 overflow-hidden rounded-3xl absolute w-96 bg-slate-800/80 backdrop-blur-sm z-10`}
       >
-        <ProjectNewBug
-          name={item.title}
-          handleForm={handleBugForm}
-          hidden={formBugHidden}
-          setHidden={setFormBugHidden}
-        />
+        <ProjectNewBug name={item.title} handleForm={handleBugForm} />
       </div>
     </>
   );

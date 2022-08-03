@@ -5,6 +5,7 @@ import hideDeleteReducer from "./table_bugs/hideDeleteSlice";
 import hideProjectFormReducer from "./projects/hideProjectFormSlice";
 import hideProjectFormEditReducer from "./projects/hideProjectFormEditSlice";
 import hideBugFormReducer from "./bugs/hideBugFormSlice";
+import bugsReducer from "./project_bugs/allBugsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     hide_project_form: hideProjectFormReducer,
     hide_project_form_edit: hideProjectFormEditReducer,
     hide_bug_form: hideBugFormReducer,
+    bugs: bugsReducer,
   },
 });

@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { FaSearch } from "react-icons/fa";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
-import { allBugs } from "../../server/bugs_table";
+import { allBugs, fetchBugs } from "../../redux/project_bugs/allBugsSlice";
 
 const ListBugs = () => {
-  const [bugs, setBugs] = useState([]);
+  // Using Redux
+  const dispatch = useDispatch();
+  const bugs = useSelector(allBugs);
+  const bugStatus = useSelector((state) => state.bugs.status);
+
+  //const [bugs, setBugs] = useState([]);
 
   useEffect(() => {
-    allBugs().then((res) => {
-      setBugs(res);
-    });
-  }, []);
+    console.log("USEEFECT LISTBUGS");
+    if (bugStatus === "idle") {
+      dispatch(fetchBugs());
+    }
+  }, [dispatch, bugStatus]);
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">

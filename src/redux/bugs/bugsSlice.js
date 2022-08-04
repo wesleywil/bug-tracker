@@ -16,12 +16,7 @@ export const fetchBugs = createAsyncThunk("bugs/fetchBugs", async () => {
 export const bugsSlice = createSlice({
   name: "bugs",
   initialState,
-  reducers: {
-    // listBugs: (state, action) => {
-    //   //state.bugs.fill(action.payload);
-    //   state.bugs = action.payload;
-    // },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchBugs.pending, (state, action) => {
@@ -41,5 +36,8 @@ export const bugsSlice = createSlice({
 export const { listBugs } = bugsSlice.actions;
 
 export const allBugs = (state) => state.bugs.bugs;
+
+export const selectBugById = (state, projectId) =>
+  state.bugs.bugs.find((bugs) => bugs.bug_id === projectId);
 
 export default bugsSlice.reducer;

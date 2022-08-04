@@ -5,7 +5,7 @@ import { FaSearch } from "react-icons/fa";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
-import { allBugs, fetchBugs } from "../../redux/project_bugs/allBugsSlice";
+import { allBugs, fetchBugs } from "../../redux/bugs/bugsSlice";
 
 const ListBugs = () => {
   // Using Redux

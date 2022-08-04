@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { hide, show } from "../../redux/projects/hideProjectFormSlice.js";
+import {
+  completed,
+  added,
+} from "../../redux/status_toast/status_toastSlice.js";
+import {
+  allProjects,
+  fetchProjects,
+} from "../../redux/projects/projectsSlice.js";
 
 import { FaPlus } from "react-icons/fa";
 
-import { allProjects, createProject } from "../../server/projects_table";
+import { createProject } from "../../server/projects_table";
 
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";
@@ -13,21 +21,23 @@ import StatusAlert from "../../components/status_alert/status_alert.component";
 const Projects = () => {
   // Using Redux
   const hideForm = useSelector((state) => state.hide_project_form.value);
+  const query = useSelector(allProjects);
+  const projectStatus = useSelector((state) => state.projects.status);
+  const toastStatus = useSelector((state) => state.toast_status.status);
   const dispatch = useDispatch();
 
   const [response, setResponse] = useState("");
-  const [query, setQuery] = useState([]);
+  //const [query, setQuery] = useState([]);
 
   useEffect(() => {
-    const getAllProjects = async () => {
-      const res = await allProjects();
-      console.log("RESULT=> ", res);
-      setQuery(res);
-    };
-    getAllProjects();
-  }, [response]);
+    console.log("PROJECTS PAGE USEEFFECT");
+    if (projectStatus === "idle") {
+      dispatch(fetchProjects());
+    }
+  }, [response, dispatch, projectStatus]);
 
   const handleFormSubmit = (event) => {
+    event.preventDefault();
     console.log("DATA==>", event.target.elements.title.value);
 
     const data = {
@@ -36,18 +46,20 @@ const Projects = () => {
       description: event.target.elements.description.value,
     };
 
-    createProject(data).then((res) => {
-      setResponse(<StatusAlert message={res.message} />);
+    createProject(data).then(() => {
+      //setResponse(<StatusAlert message={res.message} />);
       dispatch(hide());
+      dispatch(added());
       setTimeout(() => {
-        setResponse("");
+        dispatch(completed());
       }, 3000);
     });
   };
 
   return (
     <div className="h-screen">
-      {response}
+      {/* Just How is going to be */}
+      <h1 className="text-white bg-black">{toastStatus}</h1>
       <h1 className="text-3xl text-white font-semibold text-center border-b-2">
         Projects
       </h1>

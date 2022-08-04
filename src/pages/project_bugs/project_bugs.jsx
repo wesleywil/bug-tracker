@@ -1,21 +1,29 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FaSearch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
-import { selectBugsByProject } from "../../server/bugs_table";
+import {
+  bugsByProjectId,
+  fetchBugsByProject,
+} from "../../redux/bugs/bugsByProjectIdSlice";
 
 const ProjectBugs = () => {
-  let { project_id } = useParams();
-  const [bugs, setBugs] = useState([]);
+  const { project_id } = useParams();
+  // Using Redux
+  const dispatch = useDispatch();
+  const bugs = useSelector(bugsByProjectId);
+  const bugStatus = useSelector((state) => state.bugs.status);
 
   useEffect(() => {
     console.log("Project Bugs");
-    selectBugsByProject(project_id).then((res) => {
-      setBugs(res);
-    });
-  }, []);
+    if (bugStatus === "idle") {
+      console.log("PARAMS => ", project_id);
+      dispatch(fetchBugsByProject(project_id));
+    }
+  }, [dispatch, bugStatus, project_id]);
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">

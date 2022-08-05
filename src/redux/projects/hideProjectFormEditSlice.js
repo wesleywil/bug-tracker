@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: true,
+  item: {},
 };
 
 export const hideProjectFormEditSlice = createSlice({
@@ -10,9 +11,11 @@ export const hideProjectFormEditSlice = createSlice({
   reducers: {
     hide: (state) => {
       state.value = true;
+      state.item = {};
     },
-    show: (state) => {
+    show: (state, action) => {
       state.value = false;
+      state.item = action.payload;
     },
   },
 });

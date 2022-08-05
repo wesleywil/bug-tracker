@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { hide, show } from "../../redux/projects/hideProjectFormSlice.js";
+import { hide, show } from "../../redux/projects/projectFormSlice";
 import {
   completed,
   added,
@@ -20,21 +20,17 @@ import StatusAlert from "../../components/status_alert/status_alert.component";
 
 const Projects = () => {
   // Using Redux
-  const hideForm = useSelector((state) => state.hide_project_form.value);
+  const formHide = useSelector((state) => state.projectForm.hide);
   const query = useSelector(allProjects);
   const projectStatus = useSelector((state) => state.projects.status);
-  const toastStatus = useSelector((state) => state.toast_status.status);
   const dispatch = useDispatch();
-
-  const [response, setResponse] = useState("");
-  //const [query, setQuery] = useState([]);
 
   useEffect(() => {
     console.log("PROJECTS PAGE USEEFFECT");
     if (projectStatus === "idle") {
       dispatch(fetchProjects());
     }
-  }, [response, dispatch, projectStatus]);
+  }, [dispatch, projectStatus, query, formHide]);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -47,7 +43,6 @@ const Projects = () => {
     };
 
     createProject(data).then(() => {
-      //setResponse(<StatusAlert message={res.message} />);
       dispatch(hide());
       dispatch(added());
       setTimeout(() => {
@@ -59,10 +54,8 @@ const Projects = () => {
   return (
     <div className="h-screen">
       {/* Just How is going to be */}
-      <h1 className="text-white bg-black">{toastStatus}</h1>
-      <h1 className="text-3xl text-white font-semibold text-center border-b-2">
-        Projects
-      </h1>
+
+      <StatusAlert />
       <div
         className="tooltip tooltip-right tooltip-warning"
         data-tip="New Project"
@@ -76,9 +69,7 @@ const Projects = () => {
       </div>
       <div className="flex flex-wrap justify-center gap-4 p-2 mt-2">
         {query.length ? (
-          query.map((item) => (
-            <ProjectCard key={item.id} item={item} setMessage={setResponse} />
-          ))
+          query.map((item) => <ProjectCard key={item.id} item={item} />)
         ) : (
           <h1 className="bg-slate-500/20 backdrop-blur-sm p-6 text-6xl border-2 border-slate-700 rounded-2xl">
             NO PROJECTS YET
@@ -87,7 +78,7 @@ const Projects = () => {
       </div>
       <div
         className={`overflow-hidden ${
-          hideForm ? "hidden" : ""
+          formHide ? "hidden" : ""
         } bg-slate-800/50 backdrop-blur-sm absolute inset-1/4 border-2 border-slate-800 rounded-3xl`}
       >
         <ProjectForm handleForm={handleFormSubmit} formText={"New Project"} />

@@ -1,13 +1,36 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { hide, show } from "../../redux/bugs/hideBugFormSlice";
+import { hide } from "../../redux/bugs/hideBugFormSlice";
+import { added, completed } from "../../redux/status_toast/status_toastSlice";
 
-const ProjectNewBug = ({ name, handleForm, hidden, setHidden }) => {
+import { createNewBugProject } from "../../server/bugs_table";
+
+const ProjectNewBug = () => {
   // Using Redux
   const dispatch = useDispatch();
+  const item = useSelector((state) => state.hide_bug_form.item);
+
+  const handleBugForm = (event) => {
+    event.preventDefault();
+    console.log("ITEM =>", item.id);
+    const data = {
+      project_id: item.id,
+      info: event.target.elements.info.value,
+      tag_id: parseInt(event.target.elements.tag_id.value),
+      priority_id: parseInt(event.target.elements.priority_id.value),
+    };
+    createNewBugProject(data).then(() => {
+      dispatch(added());
+      dispatch(hide());
+      setTimeout(() => {
+        dispatch(completed());
+      }, 3000);
+    });
+  };
+
   return (
-    <form className="flex flex-col text-xl text-white" onSubmit={handleForm}>
-      <h1 className="font-semibold text-center">{name}</h1>
+    <form className="flex flex-col text-xl text-white" onSubmit={handleBugForm}>
+      <h1 className="font-semibold text-center">{item.title}</h1>
       <span className="font-semibold">Info</span>
       <textarea
         className="bg-slate-600 px-2 py-1 font-bold"

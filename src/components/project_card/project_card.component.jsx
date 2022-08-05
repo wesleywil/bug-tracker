@@ -9,75 +9,40 @@ import { createNewBugProject } from "../../server/bugs_table";
 import BugBadge from "../bug-badge/bug-badge.component";
 import ProjectForm from "../project_form/project_form.component";
 import ProjectNewBug from "../project_new_bug/project_new_bug.component";
-import StatusAlert from "../status_alert/status_alert.component";
-
-import {
-  show as showEdit,
-  hide as hideEdit,
-} from "../../redux/projects/hideProjectFormEditSlice";
 
 import {
   show as showFormBug,
   hide as hideFormBug,
 } from "../../redux/bugs/hideBugFormSlice";
 
-const ProjectCard = ({ item, setMessage }) => {
+import {
+  show as showForm,
+  showEdit as showFormEdit,
+  hide as hideForm,
+  hideEdit as hideFormEdit,
+} from "../../redux/projects/projectFormSlice";
+
+import { removed, completed } from "../../redux/status_toast/status_toastSlice";
+
+const ProjectCard = ({ item }) => {
   // Using Redux
-  const dispatchViewForm = useDispatch();
-  const hideForm = useSelector((state) => state.hide_project_form_edit.value);
-  const dispatchViewBugForm = useDispatch();
+  const formHide = useSelector((state) => state.projectForm.hide);
   const formBugHidden = useSelector((state) => state.hide_bug_form.value);
+  const dispatch = useDispatch();
 
   const [hidden, setHidden] = useState(true);
 
   useEffect(() => {
     console.log("Project Card");
-  }, [item]);
-
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    const data = {
-      title: event.target.elements.title.value,
-      link: event.target.elements.link.value,
-      description: event.target.elements.description.value,
-      id: item.id,
-    };
-    updateProject(data).then((res) => {
-      setMessage(
-        <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
-      );
-      dispatchViewForm(hideEdit());
-      setTimeout(() => {
-        setMessage("");
-      }, 3000);
-    });
-  };
-
-  const handleBugForm = (event) => {
-    event.preventDefault();
-    const data = {
-      project_id: item.id,
-      info: event.target.elements.info.value,
-      tag_id: parseInt(event.target.elements.tag_id.value),
-      priority_id: parseInt(event.target.elements.priority_id.value),
-    };
-    createNewBugProject(data).then((res) => {
-      setMessage(<StatusAlert message={res.message} />);
-      dispatchViewBugForm(hideFormBug());
-      setTimeout(() => {
-        setMessage("");
-      }, 3000);
-    });
-  };
+  }, [item, formHide]);
 
   const handleDelete = async (id) => {
     const res = await deleteProject(id);
-    //console.log("Delete Response =>", res);
-    //location.reload();
-    setMessage(<StatusAlert message={res.message} bgColor={"bg-red-600"} />);
+    console.log("Deleting...", res);
+    dispatch(removed());
     setHidden(true);
     setTimeout(() => {
-      setMessage("");
+      dispatch(completed());
     }, 3000);
   };
 
@@ -124,7 +89,7 @@ const ProjectCard = ({ item, setMessage }) => {
           <button
             className="tooltip tooltip-right tooltip-warning z-30"
             data-tip="New Bug"
-            onClick={() => dispatchViewBugForm(showFormBug())}
+            onClick={() => dispatch(showFormBug(item))}
           >
             <FaPlus />
           </button>
@@ -138,7 +103,7 @@ const ProjectCard = ({ item, setMessage }) => {
           <button
             className="tooltip tooltip-right tooltip-warning z-10"
             data-tip="Edit Project"
-            onClick={() => dispatchViewForm(showEdit())}
+            onClick={() => dispatch(showFormEdit(item))}
           >
             <FaRegEdit />
           </button>
@@ -158,7 +123,9 @@ const ProjectCard = ({ item, setMessage }) => {
           hidden ? "hidden" : ""
         } mt-2 border-2 rounded-xl relative w-96  z-20 bg-slate-700/80 p-2 `}
       >
-        <h1 className="text-center">Are you sure you want to delete this?</h1>
+        <h1 className="text-center">
+          Are you sure you want to delete this? {item.title}
+        </h1>
         <div className="flex justify-center gap-2 text-2xl">
           <button
             onClick={() => handleDelete(item.id)}
@@ -174,25 +141,12 @@ const ProjectCard = ({ item, setMessage }) => {
           </button>
         </div>
       </div>
-      {/* Edit Project */}
-      <div
-        className={`${
-          hideForm ? "hidden" : ""
-        } absolute w-96 bg-slate-800/80 backdrop-blur-sm z-10`}
-      >
-        <ProjectForm
-          handleForm={handleFormSubmit}
-          formText={"Edit Project"}
-          item={item}
-        />
-      </div>
-      {/* New Bug */}
       <div
         className={`${
           formBugHidden ? "hidden" : ""
         } p-4 overflow-hidden rounded-3xl absolute w-96 bg-slate-800/80 backdrop-blur-sm z-10`}
       >
-        <ProjectNewBug name={item.title} handleForm={handleBugForm} />
+        <ProjectNewBug />
       </div>
     </>
   );

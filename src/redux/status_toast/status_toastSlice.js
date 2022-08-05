@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: "",
+  bgColor: "",
 };
 
 export const statusToastSlice = createSlice({
@@ -13,12 +14,15 @@ export const statusToastSlice = createSlice({
     },
     added: (state) => {
       state.status = "Successfully Added!";
+      state.bgColor = "";
     },
     updated: (state) => {
       state.status = "Successfully Updated!";
+      state.bgColor = "bg-yellow-600";
     },
     removed: (state) => {
       state.status = "Successfully Removed!";
+      state.bgColor = "bg-red-600";
     },
   },
 });

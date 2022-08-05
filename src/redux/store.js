@@ -8,6 +8,7 @@ import hideBugFormReducer from "./bugs/hideBugFormSlice";
 import bugsReducer from "./bugs/bugsSlice";
 import bugsByProjectIdReducer from "./bugs/bugsByProjectIdSlice";
 import projectsReducer from "./projects/projectsSlice";
+import projectFormReducer from "./projects/projectFormSlice";
 import statusToastReducer from "./status_toast/status_toastSlice";
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
     bugs: bugsReducer,
     bugs_by_project_id: bugsByProjectIdReducer,
     projects: projectsReducer,
+    projectForm: projectFormReducer,
     toast_status: statusToastReducer,
   },
 });

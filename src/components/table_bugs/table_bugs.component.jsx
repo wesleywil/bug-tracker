@@ -14,14 +14,13 @@ import {
   hide as hideDelete,
 } from "../../redux/table_bugs/hideDeleteSlice";
 
+import { removed, completed } from "../../redux/status_toast/status_toastSlice";
+
 const TableBugs = ({ bugs }) => {
   //Using Redux
-  const dispatchViewDetails = useDispatch();
-  const dispatchViewUpdate = useDispatch();
-  const dispatchViewDelete = useDispatch();
+  const dispatch = useDispatch();
   const hideDeleteSelector = useSelector((state) => state.hide_delete.value);
 
-  const [response, setResponse] = useState("");
   const [bugId, setBugId] = useState(0);
   const [bug, setBug] = useState({
     bug_id: "",
@@ -51,34 +50,35 @@ const TableBugs = ({ bugs }) => {
       bug_add_date: res[0].bug_add_date,
       bug_updated_date: res[0].bug_updated_date,
     });
-    dispatchViewDetails(showDetails());
+    dispatch(showDetails());
   };
 
   const handleDeleteBugById = async (id) => {
     if (id > 0) {
       const res = await deleteBugById(id);
       console.log("BUG DELETED! ", res);
-      setResponse(<StatusAlert message={res.message} bgColor={"bg-red-600"} />);
-
+      dispatch(removed());
+      dispatch(hideDelete());
       setTimeout(() => {
+        dispatch(completed());
         location.reload();
       }, 3000);
     }
   };
 
   const handleHiddenDelete = (id) => {
-    dispatchViewDelete(showDelete());
+    dispatch(showDelete());
     setBugId(id);
   };
 
   const handleHiddenUpdate = (id) => {
-    dispatchViewUpdate(showUpdate());
+    dispatch(showUpdate());
     setBugId(id);
   };
 
   return (
     <>
-      {response}
+      <StatusAlert />
       <div
         className={`border-2 w-1/2 mx-auto rounded-3xl p-2 mb-2 ${
           hideDeleteSelector ? "hidden" : ""
@@ -95,7 +95,7 @@ const TableBugs = ({ bugs }) => {
             YES
           </button>
           <button
-            onClick={() => dispatchViewUpdate(hideDelete())}
+            onClick={() => dispatch(hideDelete())}
             className="text-green-400 hover:text-green-500 active:text-green-700"
           >
             NO
@@ -169,7 +169,7 @@ const TableBugs = ({ bugs }) => {
       </div>
       <div className="bg-slate-600/40 backdrop-blur-sm absolute ml-10 inset-x-1/4 top-52 rounded-xl">
         <BugDetails bug={bug} btnName={"Close"} />
-        <BugUpdate bug_id={bugId} setMessage={setResponse} />
+        <BugUpdate bug_id={bugId} />
       </div>
     </>
   );

@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
-import StatusAlert from "../status_alert/status_alert.component";
 
 import { selectBugByIdSimple, updateBug } from "../../server/bugs_table";
-import { allPriorities } from "../../server/priorities_table";
-import { allTags } from "../../server/tags_table";
-import { allStatus } from "../../server/status_table";
 
 import { hide } from "../../redux/table_bugs/hideUpdateSlice";
+import { fetchTags } from "../../redux/tags/tagsSlice";
+import { fetchPriorities } from "../../redux/priorities/prioritiesSlice";
+import { fetchStatus } from "../../redux/status/statusSlice";
+import { updated, completed } from "../../redux/status_toast/status_toastSlice";
 
-const BugUpdate = ({ bug_id, setMessage }) => {
+const BugUpdate = ({ bug_id }) => {
   // Using Redux
   const hideUpdate = useSelector((state) => state.hide_update.value);
+  const tags = useSelector((state) => state.tags.tags);
+  const priorities = useSelector((state) => state.priorities.priorities);
+  const status = useSelector((state) => state.status.arrStatus);
   const dispatch = useDispatch();
 
-  const [priorities, setPriorities] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [status, setStatus] = useState([]);
   const [bug, setBug] = useState({
     id: "",
     info: "",
@@ -31,20 +31,16 @@ const BugUpdate = ({ bug_id, setMessage }) => {
   });
 
   useEffect(() => {
+    console.log("Useeffect from Bug_Update_Component");
+    dispatch(fetchPriorities());
+    dispatch(fetchStatus());
+    dispatch(fetchTags());
+
     selectBugByIdSimple(bug_id).then((res) => {
       console.log(res);
       setBug(res[0]);
     });
-    allStatus().then((res) => {
-      setStatus(res);
-    });
-    allPriorities().then((res) => {
-      setPriorities(res);
-    });
-    allTags().then((res) => {
-      setTags(res);
-    });
-  }, [bug_id]);
+  }, [dispatch, bug_id]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -56,12 +52,11 @@ const BugUpdate = ({ bug_id, setMessage }) => {
       tag_id: event.target.elements.tag_id.value,
     };
     console.log("UPDATED DATA=>", data);
-    updateBug(data).then((res) => {
-      setMessage(
-        <StatusAlert message={res.message} bgColor={"bg-yellow-600"} />
-      );
+    updateBug(data).then(() => {
+      dispatch(updated());
       dispatch(hide());
       setTimeout(() => {
+        dispatch(completed());
         location.reload();
       }, 3000);
     });

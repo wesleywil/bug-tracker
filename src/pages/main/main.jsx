@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import { Doughnut, Bar } from "react-chartjs-2";
-
-import {
-  data as horizontalData,
-  options as horizontalOptions,
-} from "../../examples chartjs/horizontal_bar";
-
-import {
-  data as priorityData,
-  options as priorityOptions,
-} from "../../examples chartjs/priority_vertical_bar";
+import { useDispatch, useSelector } from "react-redux";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 import DoughnutChart from "../../components/doughnut_chart/doughnut_chart.component";
@@ -19,14 +9,23 @@ import PriorityBar from "../../components/priority_bar/priority_bar.component";
 
 import { selectLast3Bugs } from "../../server/bugs_table";
 
+import { fetchBugs } from "../../redux/bugs/bugsSlice";
+
 const Main = () => {
+  // Using Redux
+  const dispatch = useDispatch();
+  const bugStatus = useSelector((state) => state.bugs.status);
+
   const [bugs, setBugs] = useState([]);
 
   useEffect(() => {
-    selectLast3Bugs().then((res) => {
-      setBugs(res);
-    });
-  }, []);
+    if (bugStatus === "idle") {
+      dispatch(fetchBugs());
+      selectLast3Bugs().then((res) => {
+        setBugs(res);
+      });
+    }
+  }, [dispatch, bugStatus]);
 
   return (
     <div className="p-2 bg-slate-900/90">

@@ -6,6 +6,10 @@ import hideProjectFormReducer from "./projects/hideProjectFormSlice";
 import hideProjectFormEditReducer from "./projects/hideProjectFormEditSlice";
 import hideBugFormReducer from "./bugs/hideBugFormSlice";
 import bugsReducer from "./bugs/bugsSlice";
+import bugByIdSimpleReducer from "./bugs/bugsSimpleSlice";
+import tagsReducer from "./tags/tagsSlice";
+import prioritiesReducer from "./priorities/prioritiesSlice";
+import statusReducer from "./status/statusSlice";
 import bugsByProjectIdReducer from "./bugs/bugsByProjectIdSlice";
 import projectsReducer from "./projects/projectsSlice";
 import projectFormReducer from "./projects/projectFormSlice";
@@ -20,6 +24,10 @@ export const store = configureStore({
     hide_project_form_edit: hideProjectFormEditReducer,
     hide_bug_form: hideBugFormReducer,
     bugs: bugsReducer,
+    bug_by_id: bugByIdSimpleReducer,
+    tags: tagsReducer,
+    priorities: prioritiesReducer,
+    status: statusReducer,
     bugs_by_project_id: bugsByProjectIdReducer,
     projects: projectsReducer,
     projectForm: projectFormReducer,

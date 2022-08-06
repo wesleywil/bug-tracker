@@ -1,36 +1,35 @@
-import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import StatusAlert from "../../components/status_alert/status_alert.component";
-
-import { allProjects } from "../../server/projects_table";
-import { allPriorities } from "../../server/priorities_table";
-import { allStatus } from "../../server/status_table";
-import { allTags } from "../../server/tags_table";
 import { createBug } from "../../server/bugs_table";
 
+import { added, completed } from "../../redux/status_toast/status_toastSlice";
+import { fetchProjects } from "../../redux/projects/projectsSlice";
+import { fetchPriorities } from "../../redux/priorities/prioritiesSlice";
+import { fetchStatus } from "../../redux/status/statusSlice";
+import { fetchTags } from "../../redux/tags/tagsSlice";
+
 const AddBug = () => {
+  // Using Redux
+  const dispatch = useDispatch();
+  const projects = useSelector((state) => state.projects.projects);
+  const projectStatus = useSelector((state) => state.projects.status);
+  const priorities = useSelector((state) => state.priorities.priorities);
+  const status = useSelector((state) => state.status.arrStatus);
+  const tags = useSelector((state) => state.tags.tags);
+
   let navigate = useNavigate();
-  const [response, setResponse] = useState("");
-  const [projects, setProjects] = useState([]);
-  const [priorities, setPriorities] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    allProjects().then((res) => {
-      setProjects(res);
-    });
-    allPriorities().then((res) => {
-      setPriorities(res);
-    });
-    allStatus().then((res) => {
-      setStatus(res);
-    });
-    allTags().then((res) => {
-      setTags(res);
-    });
-  }, []);
+    if (projectStatus === "idle") {
+      dispatch(fetchProjects());
+      dispatch(fetchPriorities());
+      dispatch(fetchStatus());
+      dispatch(fetchTags());
+    }
+  }, [dispatch, projectStatus]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -42,17 +41,18 @@ const AddBug = () => {
       priority_id: parseInt(e.target.elements.priority_id.value),
     };
 
-    createBug(data).then((res) => {
-      setResponse(<StatusAlert message={res.message} />);
+    createBug(data).then(() => {
+      dispatch(added());
       setTimeout(() => {
-        setResponse(<Navigate to="/bugs" replace={true} />);
+        navigate("../bugs", { replace: true });
+        dispatch(completed());
       }, 3000);
     });
   };
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">
-      {response}
+      <StatusAlert />
       <h1 className="text-3xl text-white font-semibold text-center border-b-2">
         New Bug
       </h1>

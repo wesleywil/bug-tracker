@@ -3,11 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { FaPlus, FaGithub, FaBug, FaTrashAlt, FaRegEdit } from "react-icons/fa";
 
-import { updateProject, deleteProject } from "../../server/projects_table";
-import { createNewBugProject } from "../../server/bugs_table";
-
 import BugBadge from "../bug-badge/bug-badge.component";
-import ProjectForm from "../project_form/project_form.component";
 import ProjectNewBug from "../project_new_bug/project_new_bug.component";
 
 import {
@@ -23,6 +19,7 @@ import {
 } from "../../redux/projects/projectFormSlice";
 
 import { removed, completed } from "../../redux/status_toast/status_toastSlice";
+import { handleDeleteProject } from "../../redux/projects/createUpdateAndDeleteProjectSlice";
 
 const ProjectCard = ({ item }) => {
   // Using Redux
@@ -36,9 +33,8 @@ const ProjectCard = ({ item }) => {
     console.log("Project Card");
   }, [item, formHide]);
 
-  const handleDelete = async (id) => {
-    const res = await deleteProject(id);
-    console.log("Deleting...", res);
+  const handleDelete = (id) => {
+    dispatch(handleDeleteProject(id));
     dispatch(removed());
     setHidden(true);
     setTimeout(() => {

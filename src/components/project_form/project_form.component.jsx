@@ -1,16 +1,11 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateProject, createProject } from "../../server/projects_table";
-
-// import { hide } from "../../redux/projects/hideProjectFormSlice";
-// import { hide as hideEdit } from "../../redux/projects/hideProjectFormEditSlice";
+import { hide, hideEdit } from "../../redux/projects/projectFormSlice";
 import {
-  hide,
-  hideEdit,
-  show,
-  showEdit,
-} from "../../redux/projects/projectFormSlice";
+  handleCreateProject,
+  handleUpdateProject,
+} from "../../redux/projects/createUpdateAndDeleteProjectSlice";
 import {
   added,
   updated,
@@ -21,6 +16,9 @@ const ProjectForm = ({ formText }) => {
   //Using Redux
   const item = useSelector((state) => state.projectForm.item);
   const status = useSelector((state) => state.projectForm.status);
+  const statusUpdateCreate = useSelector(
+    (state) => state.create_update_delete_project.status
+  );
   const dispatch = useDispatch();
 
   const handleUpdateSubmit = (event) => {
@@ -32,13 +30,12 @@ const ProjectForm = ({ formText }) => {
       description: event.target.elements.description.value,
       id: item.id,
     };
-    updateProject(data).then((res) => {
-      dispatch(updated());
-      dispatch(hideEdit());
-      setTimeout(() => {
-        dispatch(completed());
-      }, 3000);
-    });
+    dispatch(handleUpdateProject(data));
+    dispatch(updated());
+    dispatch(hideEdit());
+    setTimeout(() => {
+      dispatch(completed());
+    }, 3000);
   };
 
   const handleCreateSubmit = (event) => {
@@ -50,19 +47,17 @@ const ProjectForm = ({ formText }) => {
       link: event.target.elements.link.value,
       description: event.target.elements.description.value,
     };
-
-    createProject(data).then(() => {
-      dispatch(hide());
-      dispatch(added());
-      setTimeout(() => {
-        dispatch(completed());
-      }, 3000);
-    });
+    dispatch(handleCreateProject(data));
+    dispatch(hide());
+    dispatch(added());
+    setTimeout(() => {
+      dispatch(completed());
+    }, 3000);
   };
 
   useEffect(() => {
     console.log("ITEM FROM USESELECTOR");
-  }, [dispatch, handleUpdateSubmit]);
+  }, [dispatch, handleUpdateSubmit, statusUpdateCreate]);
 
   return (
     <>

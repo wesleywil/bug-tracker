@@ -12,6 +12,7 @@ import prioritiesReducer from "./priorities/prioritiesSlice";
 import statusReducer from "./status/statusSlice";
 import bugsByProjectIdReducer from "./bugs/bugsByProjectIdSlice";
 import projectsReducer from "./projects/projectsSlice";
+import createUpdateAndDeleteProjectReducer from "./projects/createUpdateAndDeleteProjectSlice";
 import projectFormReducer from "./projects/projectFormSlice";
 import statusToastReducer from "./status_toast/status_toastSlice";
 
@@ -30,6 +31,7 @@ export const store = configureStore({
     status: statusReducer,
     bugs_by_project_id: bugsByProjectIdReducer,
     projects: projectsReducer,
+    create_update_delete_project: createUpdateAndDeleteProjectReducer,
     projectForm: projectFormReducer,
     toast_status: statusToastReducer,
   },

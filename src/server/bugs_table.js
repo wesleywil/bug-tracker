@@ -46,7 +46,7 @@ export async function selectLast3Bugs() {
   return res;
 }
 
-export async function selectBugsForProject(id, status_title) {
+export async function selectBugsFromProject(id, status_title) {
   let response = {};
   const action = await db.select(
     `SELECT * FROM status, bugs WHERE project_id = ${id} AND bugs.status_id = status.id AND status.title = "${status_title}"`

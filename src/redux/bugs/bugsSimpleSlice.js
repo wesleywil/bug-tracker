@@ -13,7 +13,7 @@ export const fetchBugById = createAsyncThunk(
   async (id) => {
     console.log("BUG ID=> ", id);
     const response = await selectBugByIdSimple(id);
-    return response;
+    return response[0];
   }
 );
 
@@ -36,7 +36,5 @@ export const bugByIdSimpleSlice = createSlice({
       });
   },
 });
-
-export const bugByIdSimple = (state) => state.bug_by_id.bug_by_id;
 
 export default bugByIdSimpleSlice.reducer;

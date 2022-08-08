@@ -15,6 +15,7 @@ import {
 } from "../../redux/table_bugs/hideDeleteSlice";
 
 import { removed, completed } from "../../redux/status_toast/status_toastSlice";
+import { fetchBugById } from "../../redux/bugs/bugsSimpleSlice";
 
 const TableBugs = ({ bugs }) => {
   //Using Redux
@@ -73,7 +74,8 @@ const TableBugs = ({ bugs }) => {
 
   const handleHiddenUpdate = (id) => {
     dispatch(showUpdate());
-    setBugId(id);
+    //setBugId(id);
+    dispatch(fetchBugById(id));
   };
 
   return (

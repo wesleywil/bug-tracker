@@ -1,65 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
-
-import { selectBugByIdSimple, updateBug } from "../../server/bugs_table";
-
 import { hide } from "../../redux/table_bugs/hideUpdateSlice";
 import { fetchTags } from "../../redux/tags/tagsSlice";
 import { fetchPriorities } from "../../redux/priorities/prioritiesSlice";
 import { fetchStatus } from "../../redux/status/statusSlice";
+import { handleUpdateBug } from "../../redux/bugs/bugUpdateSlice";
 import { updated, completed } from "../../redux/status_toast/status_toastSlice";
 
-const BugUpdate = ({ bug_id }) => {
+const BugUpdate = () => {
   // Using Redux
   const hideUpdate = useSelector((state) => state.hide_update.value);
   const tags = useSelector((state) => state.tags.tags);
   const priorities = useSelector((state) => state.priorities.priorities);
   const status = useSelector((state) => state.status.arrStatus);
+  const bug = useSelector((state) => state.bug_by_id.bug_by_id);
+  const bugStatus = useSelector((state) => state.bug_by_id.status);
   const dispatch = useDispatch();
-
-  const [bug, setBug] = useState({
-    id: "",
-    info: "",
-    project_id: "",
-    priority_id: "",
-    status_id: "",
-    tag_id: "",
-    add_date: "",
-    updated_date: "",
-  });
 
   useEffect(() => {
     console.log("Useeffect from Bug_Update_Component");
-    dispatch(fetchPriorities());
-    dispatch(fetchStatus());
-    dispatch(fetchTags());
-
-    selectBugByIdSimple(bug_id).then((res) => {
-      console.log(res);
-      setBug(res[0]);
-    });
-  }, [dispatch, bug_id]);
+    if (bugStatus === "idle") {
+      dispatch(fetchPriorities());
+      dispatch(fetchStatus());
+      dispatch(fetchTags());
+    }
+  }, [dispatch, bugStatus]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
-      id: bug_id,
+      id: bug.id,
       info: event.target.elements.info.value,
       priority_id: event.target.elements.priority_id.value,
       status_id: event.target.elements.status_id.value,
       tag_id: event.target.elements.tag_id.value,
     };
-    console.log("UPDATED DATA=>", data);
-    updateBug(data).then(() => {
-      dispatch(updated());
-      dispatch(hide());
-      setTimeout(() => {
-        dispatch(completed());
-        location.reload();
-      }, 3000);
-    });
+    dispatch(handleUpdateBug(data));
+    dispatch(updated());
+    dispatch(hide());
+    setTimeout(() => {
+      dispatch(completed());
+      location.reload();
+    }, 3000);
   };
 
   return (

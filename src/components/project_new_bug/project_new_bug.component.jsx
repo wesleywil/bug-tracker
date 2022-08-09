@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hide } from "../../redux/bugs/hideBugFormSlice";
 import { added, completed } from "../../redux/status_toast/status_toastSlice";
 
-import { createNewBugProject } from "../../server/bugs_table";
+import { handleCreateBugProject } from "../../redux/bugs/bugCreateSlice";
 
 const ProjectNewBug = () => {
   // Using Redux
@@ -19,13 +19,12 @@ const ProjectNewBug = () => {
       tag_id: parseInt(event.target.elements.tag_id.value),
       priority_id: parseInt(event.target.elements.priority_id.value),
     };
-    createNewBugProject(data).then(() => {
-      dispatch(added());
-      dispatch(hide());
-      setTimeout(() => {
-        dispatch(completed());
-      }, 3000);
-    });
+    dispatch(handleCreateBugProject(data));
+    dispatch(added());
+    dispatch(hide());
+    setTimeout(() => {
+      dispatch(completed());
+    }, 3000);
   };
 
   return (

@@ -5,8 +5,6 @@ import BugDetails from "../bug_details/bug_details.component";
 import BugUpdate from "../bug_update/bug_update.component";
 import StatusAlert from "../status_alert/status_alert.component";
 
-import { selectBugById, deleteBugById } from "../../server/bugs_table";
-
 import { show as showDetails } from "../../redux/table_bugs/hideDetailsSlice";
 import { show as showUpdate } from "../../redux/table_bugs/hideUpdateSlice";
 import {
@@ -16,6 +14,7 @@ import {
 
 import { removed, completed } from "../../redux/status_toast/status_toastSlice";
 import { fetchBugById } from "../../redux/bugs/bugsSimpleSlice";
+import { selectId, handleBugDelete } from "../../redux/bugs/bugsSlice";
 
 const TableBugs = ({ bugs }) => {
   //Using Redux
@@ -23,41 +22,20 @@ const TableBugs = ({ bugs }) => {
   const hideDeleteSelector = useSelector((state) => state.hide_delete.value);
 
   const [bugId, setBugId] = useState(0);
-  const [bug, setBug] = useState({
-    bug_id: "",
-    bug_info: "",
-    status_title: "",
-    tag_title: "",
-    priority_title: "",
-    project_title: "",
-    bug_add_date: "",
-    bug_updated_date: "",
-  });
 
   useEffect(() => {
     console.log("Table Bugs", bugs);
   }, [bugs]);
 
-  const handleSelectBugId = async (id) => {
-    const res = await selectBugById(id);
-    console.log("BUG BY ID=> ", res);
-    setBug({
-      bug_id: res[0].bug_id,
-      bug_info: res[0].bug_info,
-      status_title: res[0].status_title,
-      tag_title: res[0].tag_title,
-      priority_title: res[0].priority_title,
-      project_title: res[0].project_name,
-      bug_add_date: res[0].bug_add_date,
-      bug_updated_date: res[0].bug_updated_date,
-    });
+  const handleSelectBugId = (id) => {
+    console.log("HANDLE SELECT ID =", id);
+    dispatch(selectId(id));
     dispatch(showDetails());
   };
 
   const handleDeleteBugById = async (id) => {
     if (id > 0) {
-      const res = await deleteBugById(id);
-      console.log("BUG DELETED! ", res);
+      dispatch(handleBugDelete(id));
       dispatch(removed());
       dispatch(hideDelete());
       setTimeout(() => {
@@ -74,7 +52,6 @@ const TableBugs = ({ bugs }) => {
 
   const handleHiddenUpdate = (id) => {
     dispatch(showUpdate());
-    //setBugId(id);
     dispatch(fetchBugById(id));
   };
 
@@ -170,8 +147,8 @@ const TableBugs = ({ bugs }) => {
         </table>
       </div>
       <div className="bg-slate-600/40 backdrop-blur-sm absolute ml-10 inset-x-1/4 top-52 rounded-xl">
-        <BugDetails bug={bug} btnName={"Close"} />
-        <BugUpdate bug_id={bugId} />
+        <BugDetails btnName={"Close"} />
+        <BugUpdate />
       </div>
     </>
   );

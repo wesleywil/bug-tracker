@@ -10,13 +10,16 @@ import {
   fetchProjects,
 } from "../../redux/projects/projectsSlice.js";
 
+import { handleCreateProject } from "../../redux/projects/createUpdateAndDeleteProjectSlice";
+
 import { FaPlus } from "react-icons/fa";
 
-import { createProject } from "../../server/projects_table";
 
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";
 import StatusAlert from "../../components/status_alert/status_alert.component";
+
+
 
 const Projects = () => {
   // Using Redux
@@ -42,13 +45,15 @@ const Projects = () => {
       description: event.target.elements.description.value,
     };
 
-    createProject(data).then(() => {
+    // createProject(data).then(() => {
+      dispatch(handleCreateProject(data))
       dispatch(hide());
       dispatch(added());
       setTimeout(() => {
         dispatch(completed());
+        location.reload()
       }, 3000);
-    });
+    // });
   };
 
   return (

@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
+  createBug,
   allBugs as selectAllBugs,
+  selectLast3Bugs,
   deleteBugById,
 } from "../../server/bugs_table";
 
@@ -17,6 +19,14 @@ export const fetchBugs = createAsyncThunk("bugs/fetchBugs", async () => {
   return response;
 });
 
+export const fetchLast3Bugs = createAsyncThunk(
+  "bugs/fetchLast3Bugs",
+  async () => {
+    const response = await selectLast3Bugs();
+    return response;
+  }
+);
+
 export const handleBugDelete = createAsyncThunk(
   "bugs/handleBugDelete",
   async (id) => {
@@ -31,6 +41,9 @@ export const bugsSlice = createSlice({
   reducers: {
     selectId: (state, action) => {
       state.bug = state.bugs.find((item) => item.bug_id === action.payload);
+    },
+    selectLast3: (state, action) => {
+      state.bug = state.bugs.slice(0, 3);
     },
   },
   extraReducers(builder) {
@@ -60,8 +73,14 @@ export const bugsSlice = createSlice({
   },
 });
 
-export const { selectId } = bugsSlice.actions;
+export const { selectId, selectLast3 } = bugsSlice.actions;
 
 export const allBugs = (state) => state.bugs.bugs;
+
+export const last3Bugs = (state) =>
+  state.bugs.bugs
+    .filter((item) => item.bug_id)
+    .reverse()
+    .slice(0, 3);
 
 export default bugsSlice.reducer;

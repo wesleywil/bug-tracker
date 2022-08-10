@@ -7,25 +7,19 @@ import MonthlyBarChart from "../../components/monthlyBar_chart/monthlyBar_chart.
 import HorizontalChart from "../../components/horizontal_chart/horizontal_chart.component";
 import PriorityBar from "../../components/priority_bar/priority_bar.component";
 
-import { selectLast3Bugs } from "../../server/bugs_table";
-
-import { fetchBugs } from "../../redux/bugs/bugsSlice";
+import { fetchBugs, last3Bugs } from "../../redux/bugs/bugsSlice";
 
 const Main = () => {
   // Using Redux
   const dispatch = useDispatch();
   const bugStatus = useSelector((state) => state.bugs.status);
-
-  const [bugs, setBugs] = useState([]);
+  const last3bugs = useSelector(last3Bugs);
 
   useEffect(() => {
     if (bugStatus === "idle") {
       dispatch(fetchBugs());
-      selectLast3Bugs().then((res) => {
-        setBugs(res);
-      });
     }
-  }, [dispatch, bugStatus]);
+  }, [dispatch, bugStatus, last3bugs]);
 
   return (
     <div className="p-2 bg-slate-900/90">
@@ -48,7 +42,7 @@ const Main = () => {
             <h1 className="text-3xl text-white font-semibold text-center border-b-2">
               Last 3 Bugs
             </h1>
-            <TableBugs bugs={bugs} />
+            <TableBugs bugs={last3bugs} />
           </div>
         </div>
       </div>

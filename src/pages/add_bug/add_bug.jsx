@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import StatusAlert from "../../components/status_alert/status_alert.component";
-import { createBug } from "../../server/bugs_table";
 
 import { added, completed } from "../../redux/status_toast/status_toastSlice";
 import { fetchProjects } from "../../redux/projects/projectsSlice";
 import { fetchPriorities } from "../../redux/priorities/prioritiesSlice";
 import { fetchStatus } from "../../redux/status/statusSlice";
 import { fetchTags } from "../../redux/tags/tagsSlice";
+import { handleCreateBug } from "../../redux/bugs/bugCreateSlice";
 
 const AddBug = () => {
   // Using Redux
@@ -41,13 +41,14 @@ const AddBug = () => {
       priority_id: parseInt(e.target.elements.priority_id.value),
     };
 
-    createBug(data).then(() => {
-      dispatch(added());
-      setTimeout(() => {
-        navigate("../bugs", { replace: true });
-        dispatch(completed());
-      }, 3000);
-    });
+    // createBug(data).then(() => {
+    dispatch(handleCreateBug(data));
+    dispatch(added());
+    setTimeout(() => {
+      navigate("../bugs", { replace: true });
+      dispatch(completed());
+    }, 3000);
+    // });
   };
 
   return (

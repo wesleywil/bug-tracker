@@ -28,6 +28,8 @@ ChartJS.register(
 const PriorityBar = () => {
   //using Redux
   const res = useSelector((state) => state.bugs.bugs);
+  const month = new Date().getMonth() + 1;
+  const monthString = new Date().toLocaleString("default", { month: "long" });
 
   const [chartData, setChartData] = useState(priorityData);
   const Chart = () => {
@@ -36,23 +38,24 @@ const PriorityBar = () => {
     let lowData = [];
     const high = res.filter(
       (item) =>
-        item.priority_title == "High" && item.bug_add_date.slice(5, 7) == "07"
+        item.priority_title == "High" &&
+        item.bug_add_date.slice(6, 7) == month.toString()
     );
     const normal = res.filter(
       (item) =>
-        item.priority_title == "Normal" && item.bug_add_date.slice(5, 7) == "07"
+        item.priority_title == "Normal" &&
+        item.bug_add_date.slice(6, 7) == month.toString()
     );
     const low = res.filter(
       (item) =>
-        item.priority_title == "Low" && item.bug_add_date.slice(5, 7) == "07"
+        item.priority_title == "Low" &&
+        item.bug_add_date.slice(6, 7) == month.toString()
     );
     highData = [high.length];
     normalData = [normal.length];
     lowData = [low.length];
 
-    const labels = [
-      "This Month August -> Showing only July just for reference",
-    ];
+    const labels = [`This Month ${monthString}`];
     setChartData({
       labels,
       datasets: [
@@ -77,7 +80,8 @@ const PriorityBar = () => {
 
   useEffect(() => {
     Chart();
-  }, [res]);
+    console.log("Month=>", month, "month String", monthString);
+  }, [res, month, monthString]);
 
   return (
     <div className="w-2/3">

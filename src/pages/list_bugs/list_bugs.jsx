@@ -5,7 +5,7 @@ import { FaSearch } from "react-icons/fa";
 
 import TableBugs from "../../components/table_bugs/table_bugs.component";
 
-import { allBugs, fetchBugs } from "../../redux/bugs/bugsSlice";
+import { allBugs, fetchBugs, searchByInfo } from "../../redux/bugs/bugsSlice";
 
 const ListBugs = () => {
   // Using Redux
@@ -14,6 +14,15 @@ const ListBugs = () => {
   const bugStatus = useSelector((state) => state.bugs.status);
 
   //const [bugs, setBugs] = useState([]);
+
+  const handleSearchBug = () => {
+    const search = document.getElementById("search_bug").value;
+    console.log("SEARCHING...", search);
+    if (search === "") {
+      dispatch(fetchBugs());
+    }
+    dispatch(searchByInfo(search));
+  };
 
   useEffect(() => {
     console.log("USEEFECT LISTBUGS");
@@ -33,8 +42,12 @@ const ListBugs = () => {
             className="text-xl px-1 w-1/3"
             type="text"
             placeholder="Search Bugs"
+            id="search_bug"
           />
-          <button className="text-xl text-yellow-500  ">
+          <button
+            onClick={() => handleSearchBug()}
+            className="text-xl text-yellow-500  "
+          >
             <FaSearch />
           </button>
         </div>

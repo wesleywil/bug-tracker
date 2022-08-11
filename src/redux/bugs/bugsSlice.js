@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
-  createBug,
   allBugs as selectAllBugs,
   selectLast3Bugs,
   deleteBugById,
@@ -39,6 +38,11 @@ export const bugsSlice = createSlice({
   name: "bugs",
   initialState,
   reducers: {
+    searchByInfo: (state, action) => {
+      state.bugs = state.bugs.filter((item) =>
+        item.bug_info.includes(action.payload)
+      );
+    },
     selectId: (state, action) => {
       state.bug = state.bugs.find((item) => item.bug_id === action.payload);
     },
@@ -73,7 +77,7 @@ export const bugsSlice = createSlice({
   },
 });
 
-export const { selectId, selectLast3 } = bugsSlice.actions;
+export const { selectId, selectLast3, searchByInfo } = bugsSlice.actions;
 
 export const allBugs = (state) => state.bugs.bugs;
 

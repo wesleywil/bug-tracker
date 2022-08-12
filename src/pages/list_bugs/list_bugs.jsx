@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import { FaSearch } from "react-icons/fa";
 
@@ -13,7 +14,7 @@ const ListBugs = () => {
   const bugs = useSelector(allBugs);
   const bugStatus = useSelector((state) => state.bugs.status);
 
-  //const [bugs, setBugs] = useState([]);
+  const location = useLocation();
 
   const handleSearchBug = () => {
     const search = document.getElementById("search_bug").value;
@@ -26,10 +27,9 @@ const ListBugs = () => {
 
   useEffect(() => {
     console.log("USEEFECT LISTBUGS");
-    if (bugStatus === "idle") {
-      dispatch(fetchBugs());
-    }
-  }, [dispatch, bugStatus]);
+
+    dispatch(fetchBugs());
+  }, [dispatch, location.key]);
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">

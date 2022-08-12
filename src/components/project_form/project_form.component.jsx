@@ -22,7 +22,6 @@ const ProjectForm = ({ formText }) => {
   const dispatch = useDispatch();
 
   const handleUpdateSubmit = (event) => {
-    event.preventDefault();
     console.log("UPDATED!");
     const data = {
       title: event.target.elements.title.value,
@@ -39,7 +38,6 @@ const ProjectForm = ({ formText }) => {
   };
 
   const handleCreateSubmit = (event) => {
-    event.preventDefault();
     console.log("CREATED==>");
 
     const data = {

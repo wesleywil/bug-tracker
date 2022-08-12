@@ -19,11 +19,8 @@ const ProjectBugs = () => {
 
   useEffect(() => {
     console.log("Project Bugs");
-    if (bugStatus === "idle") {
-      console.log("PARAMS => ", project_id);
-      dispatch(fetchBugsByProject(project_id));
-    }
-  }, [dispatch, bugStatus, project_id]);
+    dispatch(fetchBugsByProject(project_id));
+  }, [dispatch, project_id]);
 
   return (
     <div className="p-2 bg-slate-900/80 h-screen">

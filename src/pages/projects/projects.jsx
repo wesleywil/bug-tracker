@@ -14,12 +14,9 @@ import { handleCreateProject } from "../../redux/projects/createUpdateAndDeleteP
 
 import { FaPlus } from "react-icons/fa";
 
-
 import ProjectCard from "../../components/project_card/project_card.component";
 import ProjectForm from "../../components/project_form/project_form.component";
 import StatusAlert from "../../components/status_alert/status_alert.component";
-
-
 
 const Projects = () => {
   // Using Redux
@@ -36,7 +33,6 @@ const Projects = () => {
   }, [dispatch, projectStatus, query, formHide]);
 
   const handleFormSubmit = (event) => {
-    event.preventDefault();
     console.log("DATA==>", event.target.elements.title.value);
 
     const data = {
@@ -45,15 +41,12 @@ const Projects = () => {
       description: event.target.elements.description.value,
     };
 
-    // createProject(data).then(() => {
-      dispatch(handleCreateProject(data))
-      dispatch(hide());
-      dispatch(added());
-      setTimeout(() => {
-        dispatch(completed());
-        location.reload()
-      }, 3000);
-    // });
+    dispatch(handleCreateProject(data));
+    dispatch(hide());
+    dispatch(added());
+    setTimeout(() => {
+      dispatch(completed());
+    }, 3000);
   };
 
   return (

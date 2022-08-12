@@ -39,6 +39,7 @@ const ProjectCard = ({ item }) => {
     setHidden(true);
     setTimeout(() => {
       dispatch(completed());
+      location.reload();
     }, 3000);
   };
 

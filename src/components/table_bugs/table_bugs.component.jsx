@@ -25,7 +25,7 @@ const TableBugs = ({ bugs }) => {
 
   useEffect(() => {
     console.log("Table Bugs", bugs);
-  }, [bugs]);
+  }, [bugs, dispatch]);
 
   const handleSelectBugId = (id) => {
     console.log("HANDLE SELECT ID =", id);

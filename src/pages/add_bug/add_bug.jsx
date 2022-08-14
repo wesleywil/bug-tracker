@@ -25,9 +25,6 @@ const AddBug = () => {
   useEffect(() => {
     if (projectStatus === "idle") {
       dispatch(fetchProjects());
-      dispatch(fetchPriorities());
-      dispatch(fetchStatus());
-      dispatch(fetchTags());
     }
   }, [dispatch, projectStatus]);
 

@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { FaTimes } from "react-icons/fa";
 
 import DetailsSubTitle from "../details_subtitle/details_subtitle.component";
 
@@ -11,48 +12,42 @@ const BugDetails = ({ btnName }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className={`mt-2 ${hideDetails ? "hidden" : ""}  m-2 py-2`}>
-      <h1 className="text-white text-3xl text-center mb-4">
+    <div className={`mt-2 ${hideDetails ? "hidden" : ""} mt-2 `}>
+      <button
+        onClick={() => dispatch(hide())}
+        className="float-right mr-2 text-2xl text-slate-600 bg-yellow-400 p-1 rounded-full"
+      >
+        <FaTimes />
+      </button>
+      <h1 className="text-white text-3xl text-center mb-4 border-b-2 pb-2">
         {bug ? bug.project_title : ""}
       </h1>
-      <div className="text-sm	bg-violet-400 rounded-3xl font-semibold text-slate-900 p-2">
-        <span className="m-2">Add Date: {bug ? bug.bug_add_date : ""}</span>
-        <span className="float-right">
-          Last Modification:
-          {bug
-            ? bug.bug_updated_date
-              ? bug.bug_updated_date
-              : "No modifications"
-            : ""}
-        </span>
+      <div className="flex justify-center gap-4 text-lg text-yellow-400  p-2">
+        <span>Added In : {bug ? bug.bug_add_date : ""}</span>
+        <span>Last Update: {bug ? bug.bug_updated_date : ""}</span>
       </div>
-      <DetailsSubTitle text={"Info"} />
-      <p className="text-center p-2">{bug ? bug.bug_info : ""}</p>
-      <DetailsSubTitle text={"Status"} />
-      <p className="text-center p-2">
-        <span className=" px-3 py-1 bg-violet-400 text-xl font-semibold text-slate-900 rounded-full">
-          {bug ? bug.status_title : ""}
-        </span>
-      </p>
-      <DetailsSubTitle text={"Tags"} />
-      <p className="text-center p-2">
-        <span className="px-3 py-1 bg-violet-400 text-xl font-semibold text-slate-900 rounded-full">
-          {bug ? bug.tag_title : ""}
-        </span>
-      </p>
-      <DetailsSubTitle text={"Priority"} />
-      <p className="text-center p-2">
-        <span className="px-3 py-1 bg-violet-400 text-xl font-semibold text-slate-900 rounded-full">
-          {bug ? bug.priority_title : ""}
-        </span>
-      </p>
-      <div className="border-2 flex justify-center mt-2">
-        <button
-          onClick={() => dispatch(hide())}
-          className="bg-slate-200 hover:bg-slate-300 active:bg-slate-500 text-slate-900 px-3 py-1 font-bold text-2xl m-2 rounded-3xl"
-        >
-          {btnName ? btnName : "Edit"}
-        </button>
+      <div className="text-center border-2 p-2 m-2 rounded-xl text-white">
+        <p>{bug ? bug.bug_info : ""}</p>
+      </div>
+      <div className="flex flex-col gap-2 m-2 mb-4">
+        <div className="text-center flex flex-col gap-2">
+          <DetailsSubTitle text={"Tag"} />
+          <span className="text-xl font-semibold text-slate-600 bg-yellow-400 mt-2 rounded-xl w-1/2 mx-auto">
+            {bug ? bug.tag_title : ""}
+          </span>
+        </div>
+        <div className="text-center flex flex-col gap-2">
+          <DetailsSubTitle text={"Priority"} />
+          <span className="text-xl font-semibold text-slate-600 bg-yellow-400 mt-2 rounded-xl w-1/2 mx-auto">
+            {bug ? bug.priority_title : ""}
+          </span>
+        </div>
+        <div className="text-center flex flex-col gap-2">
+          <DetailsSubTitle text={"Status"} />
+          <span className="text-xl font-semibold text-slate-600 bg-yellow-400 mt-2 rounded-xl w-1/2 mx-auto">
+            {bug ? bug.status_title : ""}
+          </span>
+        </div>
       </div>
     </div>
   );
